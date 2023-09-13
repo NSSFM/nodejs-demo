@@ -14,16 +14,23 @@ jobs:
       addToPath: true
     displayName: 'Set up Python'
   - script: |
-      cd src # Перейти в папку src
+      cd src
       npm install
       npm test
     displayName: 'Build and Test Node.js Application'
   - task: Docker@2
     inputs:
+      command: 'build'
+      Dockerfile: 'Dockerfile'
+    displayName: 'Build Docker Image'
+    outputs:
+      imageId: 'image_id'
+  - task: Docker@2
+    inputs:
       containerRegistry: 'nssfmdemo'
       repository: 'nssfmdemo'
       command: 'tag'
-      Dockerfile: 'Dockerfile'
+      imageId: $(image_id)
       tags: |
         $(Build.BuildId)
         nssfm/nssfmdemo:try
@@ -33,7 +40,7 @@ jobs:
       containerRegistry: 'nssfmdemo'
       repository: 'nssfmdemo'
       command: 'push'
-      Dockerfile: 'Dockerfile'
+      imageId: $(image_id)
       tags: |
         $(Build.BuildId)
         nssfm/nssfmdemo:try
@@ -46,5 +53,6 @@ jobs:
         Manifests/deployment.yml
         Manifests/service.yml
     displayName: 'Deploy to Kubernetes'
+
 
 
