@@ -21,7 +21,7 @@ jobs:
       npm install
       npm test
     displayName: 'Build and Test Node.js Application'
-    workingDirectory: 'src'
+    workingDirectory: 'nodejs-demo'  # Обновленный рабочий каталог
 
   - task: Docker@2
     inputs:
