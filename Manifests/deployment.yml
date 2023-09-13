@@ -13,8 +13,7 @@ spec:
         app: nodejsdemo
     spec:
       containers:
-      - name: nodejsdemo
-        image: 
-	ports:
-         - containerPort: 3000
-
+        - name: nssfmdemo 
+          image: nssfm/nssfmdemo:try
+          ports:
+          - containerPort: 3000
