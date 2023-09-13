@@ -21,6 +21,7 @@ jobs:
   - task: Docker@2
     inputs:
       command: 'build'
+      arguments: '-t nssfmdemo:latest'
       Dockerfile: 'Dockerfile'
     displayName: 'Build Docker Image'
   - script: |
