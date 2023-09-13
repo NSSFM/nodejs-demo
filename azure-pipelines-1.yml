@@ -1,0 +1,55 @@
+trigger:
+- main
+
+stages:
+- stage: IaC
+  displayName: Terraform infrastructure
+  jobs:
+  - job: Terraform
+    displayName: Terraform Deployment
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - task: TerraformInstaller@1
+      inputs:
+        terraformVersion: 'latest' 
+
+    - task: TerraformTaskV4@4
+      inputs:
+        provider: 'azurerm'
+        command: 'init'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/IaC/'
+        backendServiceArm: 'AzureRM-sp-Jan-M' 
+        backendAzureRmResourceGroupName: 'NSSFMsRG-smooth-sloth'
+        backendAzureRmStorageAccountName: 'nssfmstorage' 
+        backendAzureRmContainerName: 'tfstate' 
+        backendAzureRmKey: 'tfstate/terraform.tfstate'
+      displayName: 'Terraform init'
+
+    - task: TerraformTaskV4@4
+      inputs:
+        provider: 'azurerm'
+        command: 'plan'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/IaC/'
+        environmentServiceNameAzureRM: 'AzureRM-sp-Jan-M' 
+        commandOptions: '-out=tfplan'
+      displayName: 'Terraform plan'
+
+    # uncomment if it need
+    # - task: TerraformTaskV4@4
+    #   inputs:
+    #     workingDirectory: '$(System.DefaultWorkingDirectory)/IaC/'
+    #     provider: 'azurerm'
+    #     command: 'apply'
+    #     environmentServiceNameAzureRM: 'AzureRM-sp-Jan-M'
+    #     commandOptions: 'tfplan'
+    #   displayName: 'Terraform apply'
+
+    - task: TerraformTaskV4@4
+      inputs:
+        workingDirectory: '$(System.DefaultWorkingDirectory)/IaC/'
+        provider: 'azurerm'
+        command: 'destroy'
+        environmentServiceNameAzureRM: 'AzureRM-sp-Jan-M'
+      displayName: 'Terraform destroy'
+
