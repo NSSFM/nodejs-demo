@@ -1,12 +1,9 @@
 trigger:
 - main
-
 pr:
 - '*'
-
 pool:
   vmImage: 'ubuntu-latest'
-
 jobs:
 - job: BuildAndDeploy
   displayName: 'Build and Deploy'
@@ -16,47 +13,38 @@ jobs:
       versionSpec: '3.x'
       addToPath: true
     displayName: 'Set up Python'
-
   - script: |
-    cd src 
-    npm install
-    npm test
-   displayName: 'Build and Test Node.js Application'
-
-
+      cd src # Перейти в папку src
+      npm install
+      npm test
+    displayName: 'Build and Test Node.js Application'
   - task: Docker@2
     inputs:
       containerRegistry: 'nssfmdemo'
       repository: 'nssfmdemo'
       command: 'build'
-      Dockerfile: '**/Dockerfile'
+      Dockerfile: 'nodejs-demo/Dockerfile'
       tags: |
         latest
         $(Build.BuildNumber)
     displayName: 'Build Docker Image'
-
   - task: Docker@2
     inputs:
       containerRegistry: 'nssfmdemo'
       repository: 'nssfmdemo'
       command: 'push'
-      Dockerfile: '**/Dockerfile'
+      Dockerfile: 'nodejs-demo/Dockerfile'
       tags: |
         latest
         $(Build.BuildNumber)
     displayName: 'Push Docker Image to Registry'
-
-  - task: CopyFiles@2
-    inputs:
-      SourceFolder: '$(Build.SourcesDirectory)/Manifests'
-      Contents: '**/*.yml'
-      TargetFolder: '$(Build.ArtifactStagingDirectory)/Manifests'
-    displayName: 'Copy Kubernetes Manifests'
-
   - task: KubernetesManifest@0
     inputs:
       action: 'deploy'
       namespace: 'njsdemo'
-      manifests: '$(Build.ArtifactStagingDirectory)/Manifests/**/*.yml'
+      manifests: |
+        nodejs-demo/Manifests/deployment.yml
+        nodejs-demo/Manifests/service.yml
     displayName: 'Deploy to Kubernetes'
+
 
