@@ -18,9 +18,11 @@ jobs:
     displayName: 'Set up Python'
 
   - script: |
-      npm install
-      npm test
-    displayName: 'Build and Test Node.js Application'
+    cd src 
+    npm install
+    npm test
+   displayName: 'Build and Test Node.js Application'
+
 
   - task: Docker@2
     inputs:
