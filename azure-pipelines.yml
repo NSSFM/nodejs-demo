@@ -14,7 +14,7 @@ jobs:
       addToPath: true
     displayName: 'Set up Python'
   - script: |
-      cd src # Перейти в папку src
+      cd nodejs-demo # Перейти в папку nodejs-demo, где находится Dockerfile
       npm install
       npm test
     displayName: 'Build and Test Node.js Application'
@@ -23,7 +23,7 @@ jobs:
       containerRegistry: 'nssfmdemo'
       repository: 'nssfmdemo'
       command: 'build'
-      Dockerfile: 'nodejs-demo/Dockerfile'
+      Dockerfile: 'Dockerfile' 
       tags: |
         latest
         $(Build.BuildNumber)
@@ -33,7 +33,7 @@ jobs:
       containerRegistry: 'nssfmdemo'
       repository: 'nssfmdemo'
       command: 'push'
-      Dockerfile: 'nodejs-demo/Dockerfile'
+      Dockerfile: 'Dockerfile' 
       tags: |
         latest
         $(Build.BuildNumber)
@@ -46,5 +46,6 @@ jobs:
         nodejs-demo/Manifests/deployment.yml
         nodejs-demo/Manifests/service.yml
     displayName: 'Deploy to Kubernetes'
+
 
 
