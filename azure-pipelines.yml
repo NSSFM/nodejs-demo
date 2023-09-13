@@ -21,14 +21,14 @@ jobs:
       npm install
       npm test
     displayName: 'Build and Test Node.js Application'
-    workingDirectory: 'src .' 
+    workingDirectory: 'src'
 
   - task: Docker@2
     inputs:
       containerRegistry: 'nssfmdemo'
       repository: 'nssfmdemo'
       command: 'build'
-      Dockerfile: 'nodejs-demo/Dockerfile' 
+      Dockerfile: 'nodejs-demo/Dockerfile'
       tags: |
         latest
         $(Build.BuildNumber)
@@ -36,10 +36,10 @@ jobs:
 
   - task: Docker@2
     inputs:
-      containerRegistry: 'nssfmdemo' 
+      containerRegistry: 'nssfmdemo'
       repository: 'nssfmdemo'
       command: 'push'
-      Dockerfile: 'nodejs-demo/Dockerfile' 
+      Dockerfile: 'nodejs-demo/Dockerfile'
       tags: |
         latest
         $(Build.BuildNumber)
@@ -48,7 +48,7 @@ jobs:
   - task: KubernetesManifest@0
     inputs:
       action: 'deploy'
-      namespace: 'njsdemo' 
+      namespace: 'njsdemo'
       manifests: |
         nodejs-demo/Manifests/deployment.yml
         nodejs-demo/Manifests/service.yml
