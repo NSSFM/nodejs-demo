@@ -1,21 +1,55 @@
-# Node.js
-# Build a general Node.js project with npm.
-# Add steps that analyze code, save build artifacts, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
-
 trigger:
 - main
 
+pr:
+- '*'
+
 pool:
-  vmImage: ubuntu-latest
+  vmImage: 'ubuntu-latest'
 
-steps:
-- task: NodeTool@0
-  inputs:
-    versionSpec: '10.x'
-  displayName: 'Install Node.js'
+jobs:
+- job: BuildAndDeploy
+  displayName: 'Build and Deploy'
+  steps:
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: '3.x'
+      addToPath: true
+    displayName: 'Set up Python'
 
-- script: |
-    npm install
-    npm run build
-  displayName: 'npm install and build'
+  - script: |
+      npm install
+      npm test
+    displayName: 'Build and Test Node.js Application'
+    workingDirectory: 'src .' 
+
+  - task: Docker@2
+    inputs:
+      containerRegistry: 'nssfmdemo'
+      repository: 'nssfmdemo'
+      command: 'build'
+      Dockerfile: 'nodejs-demo/Dockerfile' 
+      tags: |
+        latest
+        $(Build.BuildNumber)
+    displayName: 'Build Docker Image'
+
+  - task: Docker@2
+    inputs:
+      containerRegistry: 'nssfmdemo' 
+      repository: 'nssfmdemo'
+      command: 'push'
+      Dockerfile: 'nodejs-demo/Dockerfile' 
+      tags: |
+        latest
+        $(Build.BuildNumber)
+    displayName: 'Push Docker Image to Registry'
+
+  - task: KubernetesManifest@0
+    inputs:
+      action: 'deploy'
+      namespace: 'njsdemo' 
+      manifests: |
+        nodejs-demo/Manifests/deployment.yml
+        nodejs-demo/Manifests/service.yml
+    displayName: 'Deploy to Kubernetes'
