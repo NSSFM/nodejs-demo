@@ -32,7 +32,7 @@ jobs:
       containerRegistry: 'nssfmdemo'
       repository: 'nssfmdemo'
       command: 'tag'
-      arguments: '$(image_id) nssfmdemo:try'
+      arguments: '$(image_id) nssfm/nssfmdemo:try'
     displayName: 'Tag Docker Image'
   - script: |
       docker push nssfmdemo:try
