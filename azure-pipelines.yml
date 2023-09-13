@@ -22,12 +22,12 @@ jobs:
     inputs:
       containerRegistry: 'nssfmdemo'
       repository: 'nssfmdemo'
-      command: 'build'
+      command: 'tag'
       Dockerfile: 'Dockerfile'
       tags: |
-        latest
-        $(Build.BuildNumber)
-    displayName: 'Build Docker Image'
+        $(Build.BuildId)
+        nssfm/nssfmdemo:try
+    displayName: 'Tag Docker Image'
   - task: Docker@2
     inputs:
       containerRegistry: 'nssfmdemo'
@@ -35,8 +35,8 @@ jobs:
       command: 'push'
       Dockerfile: 'Dockerfile'
       tags: |
-        latest
-        $(Build.BuildNumber)
+        $(Build.BuildId)
+        nssfm/nssfmdemo:try
     displayName: 'Push Docker Image to Registry'
   - task: KubernetesManifest@0
     inputs:
