@@ -21,14 +21,13 @@ jobs:
       npm install
       npm test
     displayName: 'Build and Test Node.js Application'
-    workingDirectory: 'nodejs-demo'  # Обновленный рабочий каталог
 
   - task: Docker@2
     inputs:
       containerRegistry: 'nssfmdemo'
       repository: 'nssfmdemo'
       command: 'build'
-      Dockerfile: 'nodejs-demo/Dockerfile'
+      Dockerfile: '**/Dockerfile'
       tags: |
         latest
         $(Build.BuildNumber)
@@ -39,17 +38,23 @@ jobs:
       containerRegistry: 'nssfmdemo'
       repository: 'nssfmdemo'
       command: 'push'
-      Dockerfile: 'nodejs-demo/Dockerfile'
+      Dockerfile: '**/Dockerfile'
       tags: |
         latest
         $(Build.BuildNumber)
     displayName: 'Push Docker Image to Registry'
 
+  - task: CopyFiles@2
+    inputs:
+      SourceFolder: '$(Build.SourcesDirectory)/Manifests'
+      Contents: '**/*.yml'
+      TargetFolder: '$(Build.ArtifactStagingDirectory)/Manifests'
+    displayName: 'Copy Kubernetes Manifests'
+
   - task: KubernetesManifest@0
     inputs:
       action: 'deploy'
       namespace: 'njsdemo'
-      manifests: |
-        nodejs-demo/Manifests/deployment.yml
-        nodejs-demo/Manifests/service.yml
+      manifests: '$(Build.ArtifactStagingDirectory)/Manifests/**/*.yml'
     displayName: 'Deploy to Kubernetes'
+
