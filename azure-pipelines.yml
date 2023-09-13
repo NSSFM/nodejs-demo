@@ -32,14 +32,10 @@ jobs:
       containerRegistry: 'nssfmdemo'
       repository: 'nssfmdemo'
       command: 'tag'
-      arguments: '$(image_id) nssfm/nssfmdemo:try'
+      arguments: '$(image_id) nssfmdemo:try'
     displayName: 'Tag Docker Image'
-  - task: Docker@2
-    inputs:
-      containerRegistry: 'nssfmdemo'
-      repository: 'nssfmdemo'
-      command: 'push'
-      arguments: 'nssfm/nssfmdemo:try'
+  - script: |
+      docker push nssfmdemo:try
     displayName: 'Push Docker Image to Registry'
   - task: KubernetesManifest@0
     inputs:
@@ -49,6 +45,7 @@ jobs:
         Manifests/deployment.yml
         Manifests/service.yml
     displayName: 'Deploy to Kubernetes'
+
 
 
 
