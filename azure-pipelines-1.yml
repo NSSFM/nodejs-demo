@@ -13,7 +13,7 @@ stages:
     steps:
     - task: UseAzureDevOpsServiceConnection@1
       inputs:
-        serviceEndpoint: 'YourAzureServiceConnectionName'
+        serviceEndpoint: 'AzLogin_because_i_dumb'
     - script: az provider register --namespace Microsoft.Compute
       displayName: Register Microsoft.Compute
 
