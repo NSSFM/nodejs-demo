@@ -2,7 +2,21 @@ trigger:
 - main
 pr:
 - '*'
+
 stages:
+- stage: Authentication
+  jobs:
+  - job: AzureLogin
+    displayName: Azure Login
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - task: UseAzureDevOpsServiceConnection@1
+      inputs:
+        serviceEndpoint: 'YourAzureServiceConnectionName'
+    - script: az provider register --namespace Microsoft.Compute
+      displayName: Register Microsoft.Compute
+
 - stage: IaC_TF
   displayName: Terraform Infrastructure
   jobs:
@@ -11,14 +25,9 @@ stages:
     pool:
       vmImage: ubuntu-latest
     steps:
-    - script: |
-        az provider register --namespace Microsoft.Compute
-      displayName: 'Register Microsoft.Compute'
-
     - task: TerraformInstaller@1
       inputs:
         terraformVersion: 'latest'
-
     - task: TerraformTaskV4@4
       inputs:
         provider: 'azurerm'
@@ -30,7 +39,6 @@ stages:
         backendAzureRmContainerName: 'tfstate'
         backendAzureRmKey: 'tfstate/terraform.tfstate'
       displayName: 'Terraform init'
-
     - task: TerraformTaskV4@4
       inputs:
         provider: 'azurerm'
