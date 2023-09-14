@@ -1,9 +1,12 @@
 trigger:
 - main
 
+pr:
+- '*'
+
 stages:
-- stage: IaC
-  displayName: Terraform infrastructure
+- stage: IaC_TF
+  displayName: Terraform Infrastructure
   jobs:
   - job: Terraform
     displayName: Terraform Deployment
@@ -12,17 +15,17 @@ stages:
     steps:
     - task: TerraformInstaller@1
       inputs:
-        terraformVersion: 'latest' 
+        terraformVersion: 'latest'
 
     - task: TerraformTaskV4@4
       inputs:
         provider: 'azurerm'
         command: 'init'
         workingDirectory: '$(System.DefaultWorkingDirectory)/IaC/'
-        backendServiceArm: 'AzureRM-sp-Jan-M' 
+        backendServiceArm: 'AzureRM-sp-Jan-M'
         backendAzureRmResourceGroupName: 'NSSFMsRG-smooth-sloth'
-        backendAzureRmStorageAccountName: 'nssfmstorage' 
-        backendAzureRmContainerName: 'tfstate' 
+        backendAzureRmStorageAccountName: 'nssfmstorage'
+        backendAzureRmContainerName: 'tfstate'
         backendAzureRmKey: 'tfstate/terraform.tfstate'
       displayName: 'Terraform init'
 
@@ -31,25 +34,27 @@ stages:
         provider: 'azurerm'
         command: 'plan'
         workingDirectory: '$(System.DefaultWorkingDirectory)/IaC/'
-        environmentServiceNameAzureRM: 'AzureRM-sp-Jan-M' 
-        commandOptions: '-out=tfplan'
+        environmentServiceNameAzureRM: 'AzureRM-sp-Jan-M'
+        commandOptions: '-out main.tfplan'
       displayName: 'Terraform plan'
 
-    # uncomment if it need
+    # Uncomment the following lines if you want to apply Terraform changes
+    - task: TerraformTaskV4@4
+      inputs:
+         provider: 'azurerm'
+         command: 'apply'
+         workingDirectory: '$(System.DefaultWorkingDirectory)/IaC/'
+         environmentServiceNameAzureRM: 'AzureRM-sp-Jan-M'
+         commandOptions: 'main.tfplan'
+      displayName: 'Terraform apply'
+
+    # Uncomment if want to destroy
     # - task: TerraformTaskV4@4
     #   inputs:
     #     workingDirectory: '$(System.DefaultWorkingDirectory)/IaC/'
     #     provider: 'azurerm'
-    #     command: 'apply'
+    #     command: 'destroy'
     #     environmentServiceNameAzureRM: 'AzureRM-sp-Jan-M'
-    #     commandOptions: 'tfplan'
-    #   displayName: 'Terraform apply'
+    #   displayName: 'Terraform destroy'
 
-    - task: TerraformTaskV4@4
-      inputs:
-        workingDirectory: '$(System.DefaultWorkingDirectory)/IaC/'
-        provider: 'azurerm'
-        command: 'destroy'
-        environmentServiceNameAzureRM: 'AzureRM-sp-Jan-M'
-      displayName: 'Terraform destroy'
 
