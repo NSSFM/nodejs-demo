@@ -43,9 +43,9 @@ stages:
         commandOptions: 'main.tfplan'
       displayName: 'Terraform apply'
 
-   # - task: TerraformTaskV4@4
-    #  inputs:
-    #    workingDirectory: '$(System.DefaultWorkingDirectory)/IaC/'
-    #   provider: 'azurerm'
-    #   command: 'destroy'
-     #   environmentServiceNameAzureRM: 'AzLogin_because_i_dumb'
+    - task: TerraformTaskV4@4
+      inputs:
+        workingDirectory: '$(System.DefaultWorkingDirectory)/IaC/'
+        provider: 'azurerm'
+        command: 'destroy'
+        environmentServiceNameAzureRM: 'AzLogin_because_i_dumb'
