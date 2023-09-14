@@ -14,23 +14,28 @@ stages:
     - script: |
         az provider register --namespace Microsoft.Compute
       displayName: 'Register Microsoft.Compute'
-    
+
+    - task: UseAzureDevOpsServiceConnection@1
+      inputs:
+        azureServiceConnection: 'YourServiceConnectionName'
+        continueOnError: true
+      displayName: 'Azure Login'
+
     - task: TerraformInstaller@1
       inputs:
         terraformVersion: 'latest'
-    
+
     - task: TerraformTaskV4@4
       inputs:
         provider: 'azurerm'
         command: 'init'
         workingDirectory: '$(System.DefaultWorkingDirectory)/IaC/'
-        backendServiceArm: 'AzLogin_because_i_dumb'
         backendAzureRmResourceGroupName: 'NSSFMsRG-smooth-sloth'
         backendAzureRmStorageAccountName: 'nssfmstorage'
         backendAzureRmContainerName: 'tfstate'
         backendAzureRmKey: 'tfstate/terraform.tfstate'
       displayName: 'Terraform init'
-    
+
     - task: TerraformTaskV4@4
       inputs:
         provider: 'azurerm'
@@ -39,5 +44,6 @@ stages:
         environmentServiceNameAzureRM: 'AzLogin_because_i_dumb'
         commandOptions: '-out main.tfplan'
       displayName: 'Terraform plan'
+
 
 
