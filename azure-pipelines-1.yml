@@ -24,7 +24,7 @@ stages:
         provider: 'azurerm'
         command: 'init'
         workingDirectory: '$(System.DefaultWorkingDirectory)/IaC/'
-        backendServiceArm: 'AzureRM-sp-Jan-M'
+        backendServiceArm: 'AzLogin_because_i_dumb'
         backendAzureRmResourceGroupName: 'NSSFMsRG-smooth-sloth'
         backendAzureRmStorageAccountName: 'nssfmstorage'
         backendAzureRmContainerName: 'tfstate'
@@ -36,7 +36,7 @@ stages:
         provider: 'azurerm'
         command: 'plan'
         workingDirectory: '$(System.DefaultWorkingDirectory)/IaC/'
-        environmentServiceNameAzureRM: 'AzureRM-sp-Jan-M'
+        environmentServiceNameAzureRM: 'AzLogin_because_i_dumb'
         commandOptions: '-out main.tfplan'
       displayName: 'Terraform plan'
 
