@@ -1,24 +1,9 @@
 trigger:
 - main
-pr:
-- '*'
 
 stages:
-- stage: Authentication
-  jobs:
-  - job: AzureLogin
-    displayName: Azure Login
-    pool:
-      vmImage: ubuntu-latest
-    steps:
-    - task: UseAzureDevOpsServiceConnection@1
-      inputs:
-        serviceEndpoint: 'AzLogin_because_i_dumb'
-    - script: az provider register --namespace Microsoft.Compute
-      displayName: Register Microsoft.Compute
-
 - stage: IaC_TF
-  displayName: Terraform Infrastructure
+  displayName: Terraform infrastructure
   jobs:
   - job: Terraform
     displayName: Terraform Deployment
@@ -28,16 +13,17 @@ stages:
     - task: TerraformInstaller@1
       inputs:
         terraformVersion: 'latest'
+        
     - task: TerraformTaskV4@4
       inputs:
         provider: 'azurerm'
         command: 'init'
-        environmentServiceNameAzureRM: 'AzLogin_because_i_dumb'
         workingDirectory: '$(System.DefaultWorkingDirectory)/IaC/'
+        backendServiceArm: 'AzLogin_because_i_dumb'
         backendAzureRmResourceGroupName: 'NSSFMsRG-smooth-sloth'
         backendAzureRmStorageAccountName: 'nssfmstorage'
-        backendAzureRmContainerName: 'tfstate'
-        backendAzureRmKey: 'tfstate/terraform.tfstate'
+        backendAzureRmContainerName: 'tf-state'
+        backendAzureRmKey: 'tf/terraform.tfstate'
       displayName: 'Terraform init'
     - task: TerraformTaskV4@4
       inputs:
@@ -47,3 +33,19 @@ stages:
         environmentServiceNameAzureRM: 'AzLogin_because_i_dumb'
         commandOptions: '-out main.tfplan'
       displayName: 'Terraform plan'
+
+    - task: TerraformTaskV4@4
+      inputs:
+        provider: 'azurerm'
+        command: 'apply'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/IaC/'
+        environmentServiceNameAzureRM: 'AzLogin_because_i_dumb'
+        commandOptions: 'main.tfplan'
+      displayName: 'Terraform apply'
+
+   # - task: TerraformTaskV4@4
+    #  inputs:
+    #    workingDirectory: '$(System.DefaultWorkingDirectory)/IaC/'
+    #   provider: 'azurerm'
+    #   command: 'destroy'
+     #   environmentServiceNameAzureRM: 'AzLogin_because_i_dumb'
