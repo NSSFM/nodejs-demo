@@ -3,7 +3,7 @@ trigger:
 
 stages:
 - stage: IaC_TF
-  displayName: Terraform infrastructure
+  displayName: Terraform Infrastructure
   jobs:
   - job: Terraform
     displayName: Terraform Deployment
@@ -13,7 +13,7 @@ stages:
     - task: TerraformInstaller@1
       inputs:
         terraformVersion: 'latest'
-        
+
     - task: TerraformTaskV4@4
       inputs:
         provider: 'azurerm'
@@ -25,6 +25,7 @@ stages:
         backendAzureRmContainerName: 'tf-state'
         backendAzureRmKey: 'tf/terraform.tfstate'
       displayName: 'Terraform init'
+
     - task: TerraformTaskV4@4
       inputs:
         provider: 'azurerm'
@@ -42,10 +43,13 @@ stages:
         environmentServiceNameAzureRM: 'AzLogin_because_i_dumb'
         commandOptions: 'main.tfplan'
       displayName: 'Terraform apply'
-
+      
 #    - task: TerraformTaskV4@4
 #      inputs:
 #       workingDirectory: '$(System.DefaultWorkingDirectory)/IaC/'
 #        provider: 'azurerm'
 #        command: 'destroy'
 #        environmentServiceNameAzureRM: 'AzLogin_because_i_dumb'
+
+    - script: cp ~/.kube/config $(Build.ArtifactStagingDirectory)/kubeconfig
+      displayName: 'Copy kubeconfig to artifacts'
