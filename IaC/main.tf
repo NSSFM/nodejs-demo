@@ -1,4 +1,3 @@
-# Generate random resource group name
 resource "random_pet" "rg_name" {
   prefix = var.resource_group_name_prefix
 }
@@ -14,6 +13,15 @@ resource "random_pet" "azurerm_kubernetes_cluster_name" {
 
 resource "random_pet" "azurerm_kubernetes_cluster_dns_prefix" {
   prefix = "dns"
+}
+
+resource "azurerm_storage_account" "nssfmstorage" {
+  name                     = "nssfmstorage"
+  resource_group_name      = azurerm_resource_group.rg.name
+  location                 = azurerm_resource_group.rg.location
+  account_kind             = "StorageV2"
+  account_tier             = "Standard"
+  account_replication_type = "LRS"
 }
 
 resource "azurerm_kubernetes_cluster" "k8s" {
