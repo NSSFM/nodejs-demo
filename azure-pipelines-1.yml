@@ -15,10 +15,9 @@ stages:
         az provider register --namespace Microsoft.Compute
       displayName: 'Register Microsoft.Compute'
 
-    - task: UseAzureDevOpsServiceConnection@1
-      inputs:
-        azureServiceConnection: 'YourServiceConnectionName'
-        continueOnError: true
+    - script: |
+        # Login to Azure using Service Connection credentials
+        az login --service-principal -u $(servicePrincipalId) -p $(servicePrincipalKey) --tenant $(tenantId)
       displayName: 'Azure Login'
 
     - task: TerraformInstaller@1
@@ -44,6 +43,3 @@ stages:
         environmentServiceNameAzureRM: 'AzLogin_because_i_dumb'
         commandOptions: '-out main.tfplan'
       displayName: 'Terraform plan'
-
-
-
