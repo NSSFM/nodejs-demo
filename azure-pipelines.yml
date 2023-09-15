@@ -32,7 +32,7 @@ jobs:
   - task: KubernetesManifest@0
     inputs:
       action: 'deploy'
-      kubernetesServiceConnection: 'nssfmK8s'
+      kubeconfig: $(kubeconfig)
       namespace: 'njsdemo'
       manifests: |
         Manifests/deployment.yml
