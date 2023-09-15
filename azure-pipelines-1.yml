@@ -51,7 +51,14 @@ stages:
     #    provider: 'azurerm'
     #    command: 'destroy'
     #    environmentServiceNameAzureRM: 'AzLogin_because_i_dumb'
-    
-#    - script: |
-#        az devops service-endpoint k8s update --id <service-connection-id> --name $(ServiceConnectionName) --cluster-name $(ClusterName) --resource-group $(ResourceGroupName) --kubeconfig-path "$(realpath ~/.kube/config)"
-#      displayName: 'Create/Update Kubernetes Service Connection'
+  
+    - script: |
+        kubectl config view -o json | jq -r '.clusters[0].cluster.server' > cluster_server.txt
+        kubectl config view -o json | jq -r '.users[0].user.token' > user_token.txt
+      displayName: 'Extract Kubeconfig Information'
+
+    - script: |
+        cluster_server=$(cat cluster_server.txt)
+        user_token=$(cat user_token.txt)
+        az devops service-endpoint k8s create --name "nssfmK8s2" --cluster-name "cluster-current-ladybird" --resource-group "NSSFMsRG-smooth-sloth" --cluster-server "$cluster_server" --user-token "$user_token"
+      displayName: 'Create/Update Kubernetes Service Connection'
