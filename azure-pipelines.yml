@@ -32,7 +32,7 @@ jobs:
   - task: KubernetesManifest@0
     inputs:
       action: 'deploy'
-      kubeconfig: $(kubeconfig)
+      kubeconfig: './.kube/config'
       namespace: 'njsdemo'
       manifests: |
         Manifests/deployment.yml
