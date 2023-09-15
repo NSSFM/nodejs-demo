@@ -53,5 +53,5 @@ stages:
     #    environmentServiceNameAzureRM: 'AzLogin_because_i_dumb'
     
     - script: |
-        az devops service-endpoint update --name $(ServiceConnectionName) --cluster-name $(ClusterName) --resource-group $(ResourceGroupName) --kubeconfig-path $(KubeConfigPath)
+        az devops service-endpoint k8s update --id <service-connection-id> --name $(ServiceConnectionName) --cluster-name $(ClusterName) --resource-group $(ResourceGroupName) --kubeconfig-path "$(realpath ~/.kube/config)"
       displayName: 'Create/Update Kubernetes Service Connection'
