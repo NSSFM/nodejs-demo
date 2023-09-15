@@ -52,6 +52,6 @@ stages:
     #    command: 'destroy'
     #    environmentServiceNameAzureRM: 'AzLogin_because_i_dumb'
     
-    - script: |
-        az devops service-endpoint k8s update --id <service-connection-id> --name $(ServiceConnectionName) --cluster-name $(ClusterName) --resource-group $(ResourceGroupName) --kubeconfig-path "$(realpath ~/.kube/config)"
-      displayName: 'Create/Update Kubernetes Service Connection'
+#    - script: |
+#        az devops service-endpoint k8s update --id <service-connection-id> --name $(ServiceConnectionName) --cluster-name $(ClusterName) --resource-group $(ResourceGroupName) --kubeconfig-path "$(realpath ~/.kube/config)"
+#      displayName: 'Create/Update Kubernetes Service Connection'
