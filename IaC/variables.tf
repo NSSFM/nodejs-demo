@@ -4,10 +4,16 @@ variable "resource_group_location" {
   description = "Location of the resource group."
 }
 
-variable "resource_group_name_prefix" {
-  type        = string
-  default     = "NSSFMsRG"
-  description = "rg Name"
+variable "resource_group_name" {
+  default = "NSSFMsRG-smooth-sloth"
+}
+
+variable "kubernetes_cluster_name" {
+  default = "cluster-current-ladybird"
+}
+
+variable "kubernetes_cluster_dns_prefix" {
+  default = "NSSFMsRG-smooth-sloth"
 }
 
 variable "node_count" {
