@@ -3,7 +3,7 @@ trigger:
 
 stages:
 - stage: Plan
-  displayName: 'Terraform Plan'
+  displayName: 'Plan'
   jobs:
   - job: TerraformPlan
     displayName: 'Terraform Plan'
@@ -21,32 +21,26 @@ stages:
         scriptLocation: 'inlineScript'
         inlineScript: 'az account show'
       displayName: 'Azure Login'
-
     - task: TerraformInstaller@1
       inputs:
         terraformVersion: 'latest'
       displayName: 'Install Terraform'
-      
     - script: |
         cd $(System.DefaultWorkingDirectory)/IaC/
         terraform fmt -check -recursive -diff
       displayName: 'Check Terraform Formatting'
-      
     - script: |
         cd $(System.DefaultWorkingDirectory)/IaC/
         terraform init
       displayName: 'Terraform Init'
-      
     - script: |
         cd $(System.DefaultWorkingDirectory)/IaC/
         terraform validate
       displayName: 'Terraform Validate'
-      
     - script: |
         cd $(System.DefaultWorkingDirectory)/IaC/
         terraform plan -out main.tfplan
       displayName: 'Terraform Plan (Save Plan)'
-      
     - task: PublishPipelineArtifact@1
       inputs:
         artifactName: 'tf-plan-artifact'
@@ -55,7 +49,7 @@ stages:
       displayName: 'Publish Terraform Plan Artifact'
 
 - stage: Apply
-  displayName: 'Terraform Apply'
+  displayName: 'Apply (with manual approve)'
   jobs:
   - job: TerraformApply
     displayName: 'Terraform Apply'
@@ -73,19 +67,23 @@ stages:
         scriptLocation: 'inlineScript'
         inlineScript: 'az account show'
       displayName: 'Azure Login'
-
     - task: TerraformInstaller@1
       inputs:
         terraformVersion: 'latest'
       displayName: 'Install Terraform'
-      
     - script: |
         cd $(System.DefaultWorkingDirectory)/IaC/
         terraform init
       displayName: 'Terraform Init'
-      
     - script: |
         cd $(System.DefaultWorkingDirectory)/IaC/
         terraform apply main.tfplan
       displayName: 'Terraform Apply'
+    - task: PublishPipelineArtifact@1
+      inputs:
+        artifactName: 'kubeconfig-artifact'
+        targetPath: '$(System.DefaultWorkingDirectory)/IaC/'
+        publishLocation: 'pipeline'
+      displayName: 'Publish kubeconfig Artifact'
+
 
