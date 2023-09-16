@@ -40,6 +40,12 @@ jobs:
         Manifests/service.yml
     displayName: 'Deploy to Kubernetes'
 
+  - script: |
+      echo "$(terraform output kube_config)"
+    displayName: 'Display KUBECONFIG content'
+    workingDirectory: '$(System.DefaultWorkingDirectory)/IaC/'
+
+
 
 
 
