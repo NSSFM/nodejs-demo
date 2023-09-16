@@ -37,9 +37,6 @@ jobs:
   - script: |
       az connectedk8s connect --name NSSFMsRG-smooth-sloth --resource-group NSSFMsRG-smooth-sloth
     displayName: 'Connect to Azure Arc Kubernetes'
-    azureSubscription: 'AzureNSSFMsb'
-    inputs:
-      azurePowerShellVersion: LatestVersion
 
   - task: KubernetesManifest@0
     inputs:
@@ -49,6 +46,7 @@ jobs:
         Manifests/deployment.yml
         Manifests/service.yml
     displayName: 'Deploy to Kubernetes'
+
 
  
 
