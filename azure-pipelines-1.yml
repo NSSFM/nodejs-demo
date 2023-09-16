@@ -47,7 +47,6 @@ stages:
   jobs:
   - job: TerraformApply
     displayName: 'Terraform Apply'
-    dependsOn: Plan
     pool:
       vmImage: ubuntu-latest
     steps:
