@@ -40,6 +40,10 @@ jobs:
         Manifests/service.yml
     displayName: 'Deploy to Kubernetes'
 
+  - script: |
+        terraform output kube_config
+    displayName: 'Display KUBECONFIG content'
+
 
 
 
