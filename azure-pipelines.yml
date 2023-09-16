@@ -35,6 +35,7 @@ jobs:
     displayName: 'Set Docker Image ID'
 
   - script: |
+      azureSubscription: 'AzLogin_because_i_dumb'
       az connectedk8s connect --name NSSFMsRG-smooth-sloth --resource-group NSSFMsRG-smooth-sloth
     displayName: 'Connect to Azure Arc Kubernetes'
 
