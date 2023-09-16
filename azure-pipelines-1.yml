@@ -46,13 +46,10 @@ stages:
       displayName: 'Terraform apply'
       
     - script: |
-        export KUBECONFIG=$(terraform output -raw kube_config)
-      displayName: 'Set KUBECONFIG variable'
-
-    - script: |
-       echo "KUBECONFIG: $KUBECONFIG"
-      displayName: 'Display KUBECONFIG value'
-
+        export KUBECONFIG_FILE="$(System.DefaultWorkingDirectory)/kubeconfig.yaml"
+        echo "$(terraform output -raw kube_config)" > "$KUBECONFIG_FILE"
+        cat "$KUBECONFIG_FILE"
+      displayName: 'Display KUBECONFIG content'
 
     #- task: TerraformTaskV4@4
     #  inputs:
