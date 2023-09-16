@@ -12,6 +12,7 @@ stages:
     steps:
     - task: TerraformInstaller@1
       inputs:
+      environmentServiceNameAzureRM: 'AzLogin_because_i_dumb'
         terraformVersion: 'latest'
       displayName: 'Install Terraform'
     
