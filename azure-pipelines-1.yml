@@ -49,17 +49,8 @@ stages:
     displayName: 'Terraform Apply'
     pool:
       vmImage: ubuntu-latest
-    dependsOn: Plan.TerraformPlan
+    dependsOn: Plan
     steps:
-    - task: DownloadPipelineArtifact@2
-      inputs:
-        buildType: 'specific'
-        project: 'YourProjectName'
-        pipeline: $(Build.BuildId)
-        artifactName: 'tf-plan-artifact'
-        targetPath: '$(System.DefaultWorkingDirectory)/IaC/'
-      displayName: 'Download Terraform Plan Artifact'
-    
     - task: TerraformInstaller@1
       inputs:
         terraformVersion: 'latest'
@@ -67,8 +58,21 @@ stages:
     
     - script: |
         cd $(System.DefaultWorkingDirectory)/IaC/
+        terraform init
+      displayName: 'Terraform Init'
+    
+    - task: DownloadPipelineArtifact@2
+      inputs:
+        buildType: 'current'
+        artifactName: 'tf-plan-artifact'
+        targetPath: '$(System.DefaultWorkingDirectory)/IaC/'
+      displayName: 'Download Terraform Plan Artifact'
+    
+    - script: |
+        cd $(System.DefaultWorkingDirectory)/IaC/
         terraform apply tfplan
       displayName: 'Terraform Apply'
+
 
 
   
