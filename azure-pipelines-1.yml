@@ -2,6 +2,47 @@ trigger:
 - main
 
 stages:
+- stage: IaC_TF
+  displayName: Terraform Infrastructure
+  jobs:
+  - job: Terraform
+    displayName: Terraform Deployment
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - task: TerraformInstaller@1
+      inputs:
+        terraformVersion: 'latest'
+      displayName: 'Terraform init'
+    
+    - task: TerraformTaskV4@4
+      inputs:
+        provider: 'azurerm'
+        command: 'init'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/IaC/'
+        backendServiceArm: 'AzLogin_because_i_dumb'
+        backendAzureRmResourceGroupName: 'NSSFMsRG-smooth-sloth'
+        backendAzureRmStorageAccountName: 'nssfmstorage'
+        backendAzureRmContainerName: 'tf-state'
+        backendAzureRmKey: 'tf/terraform.tfstate'
+      displayName: 'Terraform init'
+
+    - task: TerraformTaskV4@4
+      inputs:
+        provider: 'azurerm'
+        command: 'plan'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/IaC/'
+        environmentServiceNameAzureRM: 'AzLogin_because_i_dumb'
+        commandOptions: '-out main.tfplan'
+      displayName: 'Terraform plan'
+
+    - task: PublishPipelineArtifact@1
+      inputs:
+        artifactName: 'tf-plan-artifact'
+        targetPath: '$(System.DefaultWorkingDirectory)/IaC/'
+        publishLocation: 'pipeline'
+      displayName: 'Publish Terraform Plan Artifact'
+
 - stage: Plan
   displayName: 'Plan'
   jobs:
@@ -14,17 +55,6 @@ stages:
       inputs:
         versionSpec: '3.x'
         addToPath: true
-    - task: AzureCLI@2
-      inputs:
-        azureSubscription: 'AzLogin_because_i_dumb'
-        scriptType: 'bash'
-        scriptLocation: 'inlineScript'
-        inlineScript: 'az account show'
-      displayName: 'Azure Login'
-    - task: TerraformInstaller@1
-      inputs:
-        terraformVersion: 'latest'
-      displayName: 'Install Terraform'
     - script: |
         cd $(System.DefaultWorkingDirectory)/IaC/
         terraform fmt -check -recursive -diff
@@ -60,17 +90,6 @@ stages:
       inputs:
         versionSpec: '3.x'
         addToPath: true
-    - task: AzureCLI@2
-      inputs:
-        azureSubscription: 'AzLogin_because_i_dumb'
-        scriptType: 'bash'
-        scriptLocation: 'inlineScript'
-        inlineScript: 'az account show'
-      displayName: 'Azure Login'
-    - task: TerraformInstaller@1
-      inputs:
-        terraformVersion: 'latest'
-      displayName: 'Install Terraform'
     - script: |
         cd $(System.DefaultWorkingDirectory)/IaC/
         terraform init
@@ -85,5 +104,7 @@ stages:
         targetPath: '$(System.DefaultWorkingDirectory)/IaC/'
         publishLocation: 'pipeline'
       displayName: 'Publish kubeconfig Artifact'
+
+   
 
 
