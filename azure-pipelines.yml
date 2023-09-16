@@ -33,16 +33,13 @@ jobs:
   - task: KubernetesManifest@0
     inputs:
       action: 'deploy'
-      kubeconfig: './.kube/config'
+      kubernetesServiceConnection: 'nssfmK8s'
       namespace: 'njsdemo'
       manifests: |
         Manifests/deployment.yml
         Manifests/service.yml
     displayName: 'Deploy to Kubernetes'
 
-  - script: |
-        terraform output kube_config
-    displayName: 'Display KUBECONFIG content'
 
 
 
