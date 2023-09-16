@@ -2,63 +2,72 @@ trigger:
 - main
 
 stages:
-- stage: IaC_TF
-  displayName: Terraform Infrastructure
+- stage: Plan
+  displayName: 'Terraform Plan'
   jobs:
-  - job: Terraform
-    displayName: Terraform Deployment
+  - job: TerraformPlan
+    displayName: 'Terraform Plan'
     pool:
       vmImage: ubuntu-latest
     steps:
     - task: TerraformInstaller@1
       inputs:
         terraformVersion: 'latest'
-      displayName: 'Terraform init'
+      displayName: 'Install Terraform'
     
-    - task: TerraformTaskV4@4
+    - script: |
+        cd $(System.DefaultWorkingDirectory)/IaC/
+        terraform fmt -check -recursive -diff
+      displayName: 'Check Terraform Formatting'
+    
+    - script: |
+        cd $(System.DefaultWorkingDirectory)/IaC/
+        terraform init
+      displayName: 'Terraform Init'
+    
+    - script: |
+        cd $(System.DefaultWorkingDirectory)/IaC/
+        terraform validate
+      displayName: 'Terraform Validate'
+    
+    - script: |
+        cd $(System.DefaultWorkingDirectory)/IaC/
+        terraform plan -out=tfplan
+      displayName: 'Terraform Plan'
+    
+    - task: PublishPipelineArtifact@1
       inputs:
-        provider: 'azurerm'
-        command: 'init'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/IaC/'
-        backendServiceArm: 'AzLogin_because_i_dumb'
-        backendAzureRmResourceGroupName: 'NSSFMsRG-smooth-sloth'
-        backendAzureRmStorageAccountName: 'nssfmstorage'
-        backendAzureRmContainerName: 'tf-state'
-        backendAzureRmKey: 'tf/terraform.tfstate'
-      displayName: 'Terraform init'
+        artifactName: 'tf-plan-artifact'
+        targetPath: '$(System.DefaultWorkingDirectory)/IaC/'
+        publishLocation: 'pipeline'
+      displayName: 'Publish Terraform Plan Artifact'
 
-    - task: TerraformTaskV4@4
+- stage: Apply
+  displayName: 'Terraform Apply'
+  jobs:
+  - job: TerraformApply
+    displayName: 'Terraform Apply'
+    dependsOn: Plan
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - task: TerraformInstaller@1
       inputs:
-        provider: 'azurerm'
-        command: 'plan'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/IaC/'
-        environmentServiceNameAzureRM: 'AzLogin_because_i_dumb'
-        commandOptions: '-out main.tfplan'
-      displayName: 'Terraform plan'
+        terraformVersion: 'latest'
+      displayName: 'Install Terraform'
 
-    - task: TerraformTaskV4@4
-      inputs:
-        provider: 'azurerm'
-        command: 'apply'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/IaC/'
-        environmentServiceNameAzureRM: 'AzLogin_because_i_dumb'
-        commandOptions: 'main.tfplan'
-      displayName: 'Terraform apply'
+    - script: |
+        cd $(System.DefaultWorkingDirectory)/IaC/
+        terraform init
+      displayName: 'Terraform Init'
+    
+    - script: |
+        cd $(System.DefaultWorkingDirectory)/IaC/
+        terraform apply tfplan
+      displayName: 'Terraform Apply'
 
-    #- task: TerraformTaskV4@4
-    #  inputs:
-    #    workingDirectory: '$(System.DefaultWorkingDirectory)/IaC/'
-    #    provider: 'azurerm'
-    #    command: 'destroy'
-    #    environmentServiceNameAzureRM: 'AzLogin_because_i_dumb'
+    - script: |
+        cp /path/to/kubeconfig $(Build.ArtifactStagingDirectory)/kubeconfig
+      displayName: 'Publish kubeconfig to Artifact'
   
-    - script: |
-        kubectl config view -o json | jq -r '.clusters[0].cluster.server' > cluster_server.txt
-        kubectl config view -o json | jq -r '.users[0].user.token' > user_token.txt
-      displayName: 'Extract Kubeconfig Information'
-
-    - script: |
-        cluster_server=$(cat cluster_server.txt)
-        user_token=$(cat user_token.txt)
-        az devops service-endpoint k8s create --name "nssfmK8s2" --cluster-name "cluster-current-ladybird" --resource-group "NSSFMsRG-smooth-sloth" --cluster-server "$cluster_server" --user-token "$user_token"
-      displayName: 'Create/Update Kubernetes Service Connection'
+    
