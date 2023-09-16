@@ -10,32 +10,31 @@ stages:
     pool:
       vmImage: ubuntu-latest
     steps:
+    - task: UsePythonVersion@0
+      inputs:
+        versionSpec: '3.x'
+        addToPath: true
     - task: TerraformInstaller@1
       inputs:
-      environmentServiceNameAzureRM: 'AzLogin_because_i_dumb'
         terraformVersion: 'latest'
+        environmentServiceNameAzureRM: 'AzLogin_because_i_dumb' 
       displayName: 'Install Terraform'
-    
     - script: |
         cd $(System.DefaultWorkingDirectory)/IaC/
         terraform fmt -check -recursive -diff
       displayName: 'Check Terraform Formatting'
-    
     - script: |
         cd $(System.DefaultWorkingDirectory)/IaC/
         terraform init
       displayName: 'Terraform Init'
-    
     - script: |
         cd $(System.DefaultWorkingDirectory)/IaC/
         terraform validate
       displayName: 'Terraform Validate'
-    
     - script: |
         cd $(System.DefaultWorkingDirectory)/IaC/
-        terraform plan -out=tfplan
+        terraform plan -out main.tfplan
       displayName: 'Terraform Plan (Save Plan)'
-    
     - task: PublishPipelineArtifact@1
       inputs:
         artifactName: 'tf-plan-artifact'
@@ -51,20 +50,24 @@ stages:
     pool:
       vmImage: ubuntu-latest
     steps:
+    - task: UsePythonVersion@0
+      inputs:
+        versionSpec: '3.x'
+        addToPath: true
     - task: TerraformInstaller@1
       inputs:
         terraformVersion: 'latest'
+        environmentServiceNameAzureRM: 'AzLogin_because_i_dumb' 
       displayName: 'Install Terraform'
-    
     - script: |
         cd $(System.DefaultWorkingDirectory)/IaC/
         terraform init
       displayName: 'Terraform Init'
-    
     - script: |
         cd $(System.DefaultWorkingDirectory)/IaC/
-        terraform apply tfplan
+        terraform apply main.tfplan
       displayName: 'Terraform Apply'
+
 
 
 
