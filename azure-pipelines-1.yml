@@ -33,7 +33,7 @@ stages:
     - script: |
         cd $(System.DefaultWorkingDirectory)/IaC/
         terraform plan -out=tfplan
-      displayName: 'Terraform Plan'
+      displayName: 'Terraform Plan (Save Plan)'
     
     - task: PublishPipelineArtifact@1
       inputs:
@@ -55,7 +55,7 @@ stages:
       inputs:
         terraformVersion: 'latest'
       displayName: 'Install Terraform'
-
+    
     - script: |
         cd $(System.DefaultWorkingDirectory)/IaC/
         terraform init
@@ -66,8 +66,5 @@ stages:
         terraform apply tfplan
       displayName: 'Terraform Apply'
 
-    - script: |
-        cp /path/to/kubeconfig $(Build.ArtifactStagingDirectory)/kubeconfig
-      displayName: 'Publish kubeconfig to Artifact'
   
     
