@@ -46,9 +46,7 @@ stages:
       displayName: 'Terraform apply'
       
     - script: |
-        export KUBECONFIG_FILE="$(System.DefaultWorkingDirectory)/kubeconfig.yaml"
-        echo "$(terraform output -raw kube_config)" > "$KUBECONFIG_FILE"
-        cat "$KUBECONFIG_FILE"
+        terraform output kube_config
       displayName: 'Display KUBECONFIG content'
 
     #- task: TerraformTaskV4@4
