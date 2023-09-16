@@ -30,20 +30,22 @@ jobs:
       echo "##vso[task.setvariable variable=image_id]$image_id"
     displayName: 'Set Docker Image ID'
     
-    - script: |
+    
+
+#  - task: KubernetesManifest@0
+#    inputs:
+#      action: 'deploy'
+#      kubernetesServiceConnection: 'nssfmK8s'
+#      namespace: 'njsdemo'
+#      manifests: |
+#        Manifests/deployment.yml
+#        Manifests/service.yml
+#    displayName: 'Deploy to Kubernetes'
+
+  - script: |
       echo "$(terraform output kube_config)"
     displayName: 'Display KUBECONFIG content'
     workingDirectory: '$(System.DefaultWorkingDirectory)/IaC/'
-
-  - task: KubernetesManifest@0
-    inputs:
-      action: 'deploy'
-      kubernetesServiceConnection: 'nssfmK8s'
-      namespace: 'njsdemo'
-      manifests: |
-        Manifests/deployment.yml
-        Manifests/service.yml
-    displayName: 'Deploy to Kubernetes'
 
 
 
