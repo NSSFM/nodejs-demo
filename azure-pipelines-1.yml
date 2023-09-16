@@ -66,5 +66,13 @@ stages:
         terraform apply tfplan
       displayName: 'Terraform Apply'
 
+  - job: EmptyJob
+    displayName: 'Empty Job'
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - script: echo "This is an empty job."
+      displayName: 'Empty Step'
+
   
     
