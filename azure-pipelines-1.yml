@@ -46,6 +46,7 @@ stages:
       displayName: 'Terraform apply'
       
     - script: |
+        workingDirectory: '$(System.DefaultWorkingDirectory)/IaC/'
         terraform output kube_config
       displayName: 'Display KUBECONFIG content'
 
