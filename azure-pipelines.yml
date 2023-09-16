@@ -35,18 +35,19 @@ jobs:
     displayName: 'Set Docker Image ID'
 
   - script: |
-      azureSubscription: 'AzLogin_because_i_dumb'
-      az connectedk8s connect --name NSSFMsRG-smooth-sloth --resource-group NSSFMsRG-smooth-sloth
-    displayName: 'Connect to Azure Arc Kubernetes'
+        terraform output kube_config
+    workingDirectory: $(System.DefaultWorkingDirectory)/IaC/
+    displayName: 'Display KUBECONFIG content'
 
-  - task: KubernetesManifest@0
-    inputs:
-      action: 'deploy'
-      namespace: 'default'
-      manifests: |
-        Manifests/deployment.yml
-        Manifests/service.yml
-    displayName: 'Deploy to Kubernetes'
+#  - task: KubernetesManifest@0
+#    inputs:
+#      action: 'deploy'
+#      kubernetesServiceConnection: 'nssfmK8s'
+#      namespace: 'default'
+#      manifests: |
+#        Manifests/deployment.yml
+#        Manifests/service.yml
+#    displayName: 'Deploy to Kubernetes'
 
 
  
