@@ -8,35 +8,35 @@ output "kubernetes_cluster_name" {
 
 output "client_certificate" {
   value     = azurerm_kubernetes_cluster.k8s.kube_config[0].client_certificate
-  sensitive = false
+  sensitive = true
 }
 
 output "client_key" {
   value     = azurerm_kubernetes_cluster.k8s.kube_config[0].client_key
-  sensitive = false
+  sensitive = true
 }
 
 output "cluster_ca_certificate" {
   value     = azurerm_kubernetes_cluster.k8s.kube_config[0].cluster_ca_certificate
-  sensitive = false
+  sensitive = true
 }
 
 output "cluster_password" {
   value     = azurerm_kubernetes_cluster.k8s.kube_config[0].password
-  sensitive = false
+  sensitive = true
 }
 
 output "cluster_username" {
   value     = azurerm_kubernetes_cluster.k8s.kube_config[0].username
-  sensitive = false
+  sensitive = true
 }
 
 output "host" {
   value     = azurerm_kubernetes_cluster.k8s.kube_config[0].host
-  sensitive = false
+  sensitive = true
 }
 
 output "kube_config" {
   value     = azurerm_kubernetes_cluster.k8s.kube_config_raw
-  sensitive = false
+  sensitive = true
 }
