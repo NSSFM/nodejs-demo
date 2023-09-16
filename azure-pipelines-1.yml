@@ -45,15 +45,6 @@ stages:
 - stage: Apply
   displayName: 'Terraform Apply'
   jobs:
-  - job: EchoMessage
-    displayName: 'Echo Message'
-    pool:
-      vmImage: ubuntu-latest
-    steps:
-    - script: |
-        echo "Terraform Apply job has started."
-        sleep 10
-        echo "Terraform Apply job has finished."
   - job: TerraformApply
     displayName: 'Terraform Apply'
     dependsOn: Plan
