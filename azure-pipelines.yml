@@ -31,7 +31,7 @@ jobs:
 
   - script: |
       image_id=$(docker images -q)
-      echo "##vso[task.setvariable%20variable=image_id]$image_id"
+      echo "image_id=$image_id" >> $(Agent.TempDirectory)/dockerimageid.txt
     displayName: 'Set Docker Image ID'
 
   - script: |
