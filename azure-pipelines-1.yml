@@ -1,5 +1,5 @@
 trigger:
-- main
+- manual
 
 stages:
 - stage: IaC_TF
