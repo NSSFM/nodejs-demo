@@ -45,11 +45,20 @@ stages:
 - stage: Apply
   displayName: 'Terraform Apply'
   jobs:
-  - job: TerraformApply
-    displayName: 'Terraform Apply'
+  - job: EchoMessage
+    displayName: 'Echo Message'
     pool:
       vmImage: ubuntu-latest
+    steps:
+    - script: |
+        echo "Terraform Apply job has started."
+        sleep 10
+        echo "Terraform Apply job has finished."
+  - job: TerraformApply
+    displayName: 'Terraform Apply'
     dependsOn: Plan
+    pool:
+      vmImage: ubuntu-latest
     steps:
     - task: TerraformInstaller@1
       inputs:
@@ -60,13 +69,6 @@ stages:
         cd $(System.DefaultWorkingDirectory)/IaC/
         terraform init
       displayName: 'Terraform Init'
-    
-    - task: DownloadPipelineArtifact@2
-      inputs:
-        buildType: 'current'
-        artifactName: 'tf-plan-artifact'
-        targetPath: '$(System.DefaultWorkingDirectory)/IaC/'
-      displayName: 'Download Terraform Plan Artifact'
     
     - script: |
         cd $(System.DefaultWorkingDirectory)/IaC/
