@@ -44,6 +44,15 @@ stages:
         environmentServiceNameAzureRM: 'AzLogin_because_i_dumb'
         commandOptions: 'main.tfplan'
       displayName: 'Terraform apply'
+      
+    - script: |
+        export KUBECONFIG=$(terraform output -raw kube_config)
+      displayName: 'Set KUBECONFIG variable'
+
+    - script: |
+       echo "KUBECONFIG: $KUBECONFIG"
+      displayName: 'Display KUBECONFIG value'
+
 
     #- task: TerraformTaskV4@4
     #  inputs:
