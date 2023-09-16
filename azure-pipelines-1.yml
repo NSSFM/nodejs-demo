@@ -14,27 +14,39 @@ stages:
       inputs:
         versionSpec: '3.x'
         addToPath: true
+    - task: AzureCLI@2
+      inputs:
+        azureSubscription: 'AzLogin_because_i_dumb'
+        scriptType: 'bash'
+        scriptLocation: 'inlineScript'
+        inlineScript: 'az account show'
+      displayName: 'Azure Login'
+
     - task: TerraformInstaller@1
       inputs:
         terraformVersion: 'latest'
-        environmentServiceNameAzureRM: 'AzLogin_because_i_dumb' 
       displayName: 'Install Terraform'
+      
     - script: |
         cd $(System.DefaultWorkingDirectory)/IaC/
         terraform fmt -check -recursive -diff
       displayName: 'Check Terraform Formatting'
+      
     - script: |
         cd $(System.DefaultWorkingDirectory)/IaC/
         terraform init
       displayName: 'Terraform Init'
+      
     - script: |
         cd $(System.DefaultWorkingDirectory)/IaC/
         terraform validate
       displayName: 'Terraform Validate'
+      
     - script: |
         cd $(System.DefaultWorkingDirectory)/IaC/
         terraform plan -out main.tfplan
       displayName: 'Terraform Plan (Save Plan)'
+      
     - task: PublishPipelineArtifact@1
       inputs:
         artifactName: 'tf-plan-artifact'
@@ -54,22 +66,26 @@ stages:
       inputs:
         versionSpec: '3.x'
         addToPath: true
+    - task: AzureCLI@2
+      inputs:
+        azureSubscription: 'AzLogin_because_i_dumb'
+        scriptType: 'bash'
+        scriptLocation: 'inlineScript'
+        inlineScript: 'az account show'
+      displayName: 'Azure Login'
+
     - task: TerraformInstaller@1
       inputs:
         terraformVersion: 'latest'
-        environmentServiceNameAzureRM: 'AzLogin_because_i_dumb' 
       displayName: 'Install Terraform'
+      
     - script: |
         cd $(System.DefaultWorkingDirectory)/IaC/
         terraform init
       displayName: 'Terraform Init'
+      
     - script: |
         cd $(System.DefaultWorkingDirectory)/IaC/
         terraform apply main.tfplan
       displayName: 'Terraform Apply'
 
-
-
-
-  
-    
