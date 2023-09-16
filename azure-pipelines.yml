@@ -45,7 +45,7 @@ jobs:
   - script: |
       echo "$(terraform output kube_config)"
     displayName: 'Display KUBECONFIG content'
-    workingDirectory: '$(System.DefaultWorkingDirectory)/IaC/'
+    workingDirectory: '/opt/hostedtoolcache/terraform/1.5.7/x64/'
 
 
 
