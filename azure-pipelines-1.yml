@@ -45,18 +45,7 @@ stages:
         commandOptions: 'main.tfplan'
       displayName: 'Terraform apply'
 
-    - script: |
-        az aks get-credentials --resource-group NSSFMsRG-smooth-sloth --name cluster-current-ladybird
-        cat $(HOME)/.kube/config
-      displayName: 'Get and Display KUBECONFIG'
-
-
-
-
-
-
-
-
+    
     #- task: TerraformTaskV4@4
     #  inputs:
     #    workingDirectory: '$(System.DefaultWorkingDirectory)/IaC/'
