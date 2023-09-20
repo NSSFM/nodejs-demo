@@ -46,22 +46,20 @@ stages:
       displayName: 'Terraform apply'
 
     - script: |
-      
         cluster_url=$(terraform output kubernetes_cluster_url)
         ca_cert_data=$(terraform output kubernetes_ca_cert_data)
         client_cert_data=$(terraform output kubernetes_client_cert_data)
         client_key_data=$(terraform output kubernetes_client_key_data)
 
-       
         mkdir -p $(System.DefaultWorkingDirectory)/IaC/.kube
         echo "$cluster_url" | base64 -d > $(System.DefaultWorkingDirectory)/IaC/.kube/config
         echo "$ca_cert_data" | base64 -d >> $(System.DefaultWorkingDirectory)/IaC/.kube/config
         echo "$client_cert_data" | base64 -d >> $(System.DefaultWorkingDirectory)/IaC/.kube/config
         echo "$client_key_data" | base64 -d >> $(System.DefaultWorkingDirectory)/IaC/.kube/config
 
-       
-        az pipelines variable update --name KUBECONFIG --value "$(cat $(System.DefaultWorkingDirectory)/IaC/.kube/config)" --org https://dev.azure.com/BTT-Candidates/
+        az pipelines variable create --name KUBECONFIG --value "$(cat $(System.DefaultWorkingDirectory)/IaC/.kube/config)" --org https://dev.azure.com/BTT-Candidates/
       displayName: 'Create and set Kubernetes config'
+
 
 
 
