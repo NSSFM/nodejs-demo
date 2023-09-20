@@ -46,9 +46,32 @@ stages:
       displayName: 'Terraform apply'
       
     - script: |
-        terraform output kube_config
-      workingDirectory: $(System.DefaultWorkingDirectory)/IaC/
-      displayName: 'Display KUBECONFIG content'
+        # Извлекаем значения из Terraform output
+        resource_group_name=$(terraform output resource_group_name)
+        kubernetes_cluster_name=$(terraform output kubernetes_cluster_name)
+        client_certificate=$(terraform output client_certificate)
+        client_key=$(terraform output client_key)
+        cluster_ca_certificate=$(terraform output cluster_ca_certificate)
+        cluster_password=$(terraform output cluster_password)
+        cluster_username=$(terraform output cluster_username)
+        host=$(terraform output host)
+        kube_config=$(terraform output kube_config)
+        
+        echo "resource_group_name=$resource_group_name" >> $(System.DefaultWorkingDirectory)/IaC/kubeconfig.yaml
+        echo "kubernetes_cluster_name=$kubernetes_cluster_name" >> $(System.DefaultWorkingDirectory)/IaC/kubeconfig.yaml
+        echo "client_certificate=$client_certificate" >> $(System.DefaultWorkingDirectory)/IaC/kubeconfig.yaml
+        echo "client_key=$client_key" >> $(System.DefaultWorkingDirectory)/IaC/kubeconfig.yaml
+        echo "cluster_ca_certificate=$cluster_ca_certificate" >> $(System.DefaultWorkingDirectory)/IaC/kubeconfig.yaml
+        echo "cluster_password=$cluster_password" >> $(System.DefaultWorkingDirectory)/IaC/kubeconfig.yaml
+        echo "cluster_username=$cluster_username" >> $(System.DefaultWorkingDirectory)/IaC/kubeconfig.yaml
+        echo "host=$host" >> $(System.DefaultWorkingDirectory)/IaC/kubeconfig.yaml
+        echo "$kube_config" >> $(System.DefaultWorkingDirectory)/IaC/kubeconfig.yaml
+      displayName: 'Create Kubernetes config'
+
+    - script: |
+        az pipelines variable update --name KUBECONFIG --value "$(cat $(System.DefaultWorkingDirectory)/IaC/kubeconfig.yaml)"
+      displayName: 'Update Kubernetes config variable'
+
 
 
     #- task: TerraformTaskV4@4
