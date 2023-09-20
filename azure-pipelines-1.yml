@@ -46,8 +46,10 @@ stages:
       displayName: 'Terraform apply'
 
     - script: |
-       cat $(HOME)/.kube/config
-      displayName: 'Display KUBECONFIG content'
+        az aks get-credentials --resource-group NSSFMsRG-smooth-sloth --name cluster-current-ladybird
+        cat $(HOME)/.kube/config
+      displayName: 'Get and Display KUBECONFIG'
+
 
 
 
