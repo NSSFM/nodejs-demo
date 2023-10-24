@@ -34,11 +34,6 @@ jobs:
       echo "image_id=$image_id" >> $(Agent.TempDirectory)/dockerimageid.txt
     displayName: 'Set Docker Image ID'
 
-#  - script: |
-#        terraform output kube_config
-#    workingDirectory: $(System.DefaultWorkingDirectory)/IaC/
-#    displayName: 'Display KUBECONFIG content'
-
   - task: KubernetesManifest@0
     inputs:
       action: 'deploy'
