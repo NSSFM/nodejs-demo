@@ -6,7 +6,7 @@ stages:
   jobs:
   - job: deploy_ingress
     steps:
-    - task: UseKubectl@0
+    - task: Kubernetes@1
       inputs:
         connectionType: 'Kubernetes Service Connection'
         kubernetesServiceConnection: 'nssfmK8s'
