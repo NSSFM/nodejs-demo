@@ -2,11 +2,16 @@ trigger:
 - manual
 
 stages:
-- deploy
+- stage: deploy
+  jobs:
+  - job: deploy_ingress
+    steps:
+    - task: UseKubectl@0
+      inputs:
+        connectionType: 'Kubernetes Service Connection'
+        kubernetesServiceConnection: 'nssfmK8s'
+        command: 'apply'
+        arguments: '-f nssfm-demo-ingress.yaml'
+        displayName: 'Apply ingress configuration'
 
-deploy_ingress:
-  stage: deploy
-  kubernetesServiceConnection: 'nssfmK8s'
-  script:
-    - kubectl apply -f nssfm-demo-ingress.yaml
   
