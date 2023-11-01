@@ -1,0 +1,16 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: nssfm-demo-ingress
+spec:
+  rules:
+    - host: demo1.skaylink.dev
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: nodejsdemo-service
+                port:
+                  number: 3000
