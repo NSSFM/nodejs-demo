@@ -1,0 +1,12 @@
+trigger: 
+- manual
+
+stages:
+- deploy
+
+deploy_ingress:
+  stage: deploy
+  kubernetesServiceConnection: 'nssfmK8s'
+  script:
+    - kubectl apply -f nssfm-demo-ingress.yaml
+  
