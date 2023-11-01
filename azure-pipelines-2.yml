@@ -8,10 +8,12 @@ stages:
     steps:
     - task: Kubernetes@1
       inputs:
-        kubectlServiceConnection: 'nssfmK8s'
-        script: |
-          kubectl apply -f nssfm-demo-ingress.yaml
+        connectionType: 'Kubernetes Service Connection'
+        kubernetesServiceEndpoint: 'nssfmK8s'
+        command: 'apply'
+        arguments: '-f nssfm-demo-ingress.yaml'
         displayName: 'Apply ingress configuration'
+
 
 
   
