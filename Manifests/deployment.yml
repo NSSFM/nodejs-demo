@@ -16,4 +16,4 @@ spec:
         - name: nssfmdemo 
           image: nssfm/nssfmdemo:try
           ports:
-          - containerPort: 3000
+          - containerPort: 80
