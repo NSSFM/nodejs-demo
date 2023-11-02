@@ -6,6 +6,6 @@ spec:
   selector:
     app: nodejsdemo
   ports:
-    - port: 3000
+    - port: 80
   type: LoadBalancer
 
