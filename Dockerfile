@@ -14,10 +14,10 @@ COPY /src .
 RUN npm ci
 
 # Set port environment variable
-ENV PORT=3000
+ENV PORT=80
 
 # Expose port
-EXPOSE 3000
+EXPOSE 80
 
 # Start the Node.js app
 CMD ["npm", "run",  "start"]
