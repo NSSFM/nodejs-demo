@@ -1,11 +1,11 @@
 trigger:
-- manual    # Manual trigger for the pipeline. 
+- manual    
 
 stages:
 - stage: IaC_TF
   displayName: Terraform Infrastructure
   jobs:
-  - job: Terraform     # Terraform Deployment job.
+  - job: Terraform     
     displayName: Terraform Deployment
     pool:
       vmImage: ubuntu-latest
@@ -25,7 +25,7 @@ stages:
         backendAzureRmStorageAccountName: 'nssfmstorage'
         backendAzureRmContainerName: 'tf-state'
         backendAzureRmKey: 'tf/terraform.tfstate'
-      displayName: 'Terraform init'     # Initialize Terraform configurations and state.
+      displayName: 'Terraform init'    
 
     - task: TerraformTaskV4@4
       inputs:
@@ -34,7 +34,7 @@ stages:
         workingDirectory: '$(System.DefaultWorkingDirectory)/IaC/'
         environmentServiceNameAzureRM: 'AzLogin_because_i_dumb'
         commandOptions: '-out main.tfplan'
-      displayName: 'Terraform plan'     # Create an execution plan for changes.
+      displayName: 'Terraform plan'    
 
     - task: TerraformTaskV4@4
       inputs:
