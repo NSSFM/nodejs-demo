@@ -41,6 +41,8 @@ jobs:
         Manifests/deployment.yml
         Manifests/service.yml
     displayName: 'Deploy to Kubernetes'
+    
+   #Better to use helmcharts for more compicated deployment and better splitting variables for dev/stage/prod env
 
 
  
