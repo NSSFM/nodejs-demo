@@ -25,7 +25,7 @@ stages:
         backendAzureRmStorageAccountName: 'nssfmstorage'
         backendAzureRmContainerName: 'tf-state'
         backendAzureRmKey: 'tf/terraform.tfstate'
-      displayName: 'Terraform init'    
+      displayName: 'Terraform init'    #if u need persistance better use S3 storage for tfstate files
 
     - task: TerraformTaskV4@4
       inputs:
