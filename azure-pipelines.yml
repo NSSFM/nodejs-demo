@@ -1,7 +1,5 @@
 trigger:
 - manual
-pr:
-- '*'
 
 pool:
   vmImage: 'ubuntu-latest'
