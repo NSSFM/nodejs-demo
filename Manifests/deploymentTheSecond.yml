@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nodejsdemo2
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nodejsdemo2
+  template:
+    metadata:
+      labels:
+        app: nodejsdemo2
+    spec:
+      containers:
+        - name: nssfmdemo2
+          image: 
+          ports:
+            - containerPort: 3000
