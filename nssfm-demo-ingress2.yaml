@@ -21,3 +21,4 @@ spec:
                 name: nodejsdemo-service2
                 port:
                   number: 80
+
