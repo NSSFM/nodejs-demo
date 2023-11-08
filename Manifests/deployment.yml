@@ -27,11 +27,11 @@ spec:
   replicas: 3
   selector:
     matchLabels:
-      app: nodejsdemo2
+      app: mynginx
   template:
     metadata:
       labels:
-        app: nodejsdemo2
+        app: mynginx
     spec:
       containers:
         - name: mynginx
