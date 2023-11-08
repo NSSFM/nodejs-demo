@@ -15,7 +15,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: nodejsdemo-service2
+  name: nginx
 spec:
   selector:
     app: nodejsdemo2
