@@ -14,7 +14,7 @@ stages:
 
     - task: Kubernetes@1
       inputs:
-        kubernetesServiceConnection: 'nssfmK8s'
+        kubernetesServiceendpoint: 'nssfmK8s'
         command: 'apply'
         arguments: '-f nssfm-demo-ingress2.yaml'
       displayName: 'Install NGINX Ingress Controller'
