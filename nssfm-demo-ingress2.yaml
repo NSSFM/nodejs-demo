@@ -10,7 +10,7 @@ spec:
     - host: demo1.skaylink.dev
       http:
         paths:
-          - path: /service1
+          - path: /
             pathType: Prefix
             backend:
               service:
