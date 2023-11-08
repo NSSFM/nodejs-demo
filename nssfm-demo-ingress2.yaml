@@ -21,10 +21,3 @@ spec:
                 name: nodejsdemo-service2
                 port:
                   number: 80
-          - path: /path3
-            pathType: Prefix
-            backend:
-              service:
-                name: nodejsdemo-service3
-                port:
-                  number: 80
