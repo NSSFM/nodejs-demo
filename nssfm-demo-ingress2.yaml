@@ -21,7 +21,7 @@ spec:
                 name: nodejsdemo-service
                 port:
                   number: 80
-    - host: demo2.skaylink.dev
+    - host: demo1.skaylink.dev
       http:
         paths:
           - path: /path2
@@ -31,7 +31,7 @@ spec:
                 name: nodejsdemo-service2
                 port:
                   number: 80
-    - host: demo3.skaylink.dev
+    - host: demo1.skaylink.dev
       http:
         paths:
           - path: /path3
