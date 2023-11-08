@@ -7,7 +7,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-    - host: demo1.skaylink.dev
+    - host: ""
       http:
         paths:
           - path: /
