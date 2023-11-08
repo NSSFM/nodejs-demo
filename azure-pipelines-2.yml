@@ -1,9 +1,33 @@
-trigger: 
+trigger:
 - manual
 
 stages:
 - stage: deploy
   jobs:
+  - job: install_helm
+    steps:
+    - task: UsePythonVersion@0
+      inputs:
+        versionSpec: '3.x'
+        addToPath: true
+      displayName: 'Set up Python'
+
+    - script: |
+        curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
+      displayName: 'Install Helm'
+
+  - job: install_nginx_ingress_controller
+    steps:
+    - task: HelmInstaller@1
+      inputs:
+        helmVersion: '3.x'
+        displayName: 'Install Helm 3'
+
+    - script: |
+        helm repo add stable https://charts.helm.sh/stable
+        helm install nginx-ingress stable/nginx-ingress
+      displayName: 'Install Nginx Ingress Controller'
+
   - job: deploy_ingress
     steps:
     - task: Kubernetes@1
@@ -13,6 +37,7 @@ stages:
         command: 'apply'
         arguments: '-f nssfm-demo-ingress2.yaml'
         displayName: 'Apply ingress configuration'
+
 
 
 
