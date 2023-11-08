@@ -1,10 +1,10 @@
-trigger:
+trigger: 
 - manual
 
 stages:
 - stage: deploy
   jobs:
-  - job: install_helm_and_nginx_ingress
+  - job: install_nginx_ingress_controller
     steps:
     - task: UsePythonVersion@0
       inputs:
@@ -12,26 +12,19 @@ stages:
         addToPath: true
       displayName: 'Set up Python'
 
-    - script: |
-        curl https://baltocdn.com/helm/signing.asc | sudo apt-key add -
-        sudo apt-get install apt-transport-https --yes
-        echo "deb https://baltocdn.com/helm/stable/debian/ all main" | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list
-        sudo apt-get update
-        sudo apt-get install helm
-      displayName: 'Install Helm'
+    - task: Kubernetes@1
+      inputs:
+        kubernetesServiceConnection: 'nssfmK8s'
+        command: 'apply'
+        arguments: '-f nssfm-demo-ingress2.yaml'
+      displayName: 'Install NGINX Ingress Controller'
 
     - script: |
         helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
         helm repo update
-        helm install nginx-ingress ingress-nginx/ingress-nginx
-      displayName: 'Install NGINX Ingress Controller'
+      displayName: 'Add NGINX Ingress Helm repository'
 
-  - job: deploy_ingress
-    steps:
-    - task: Kubernetes@1
-      inputs:
-        connectionType: 'Kubernetes Service Connection'
-        kubernetesServiceEndpoint: 'nssfmK8s'
-        command: 'apply'
-        arguments: '-f nssfm-demo-ingress2.yaml'
-        displayName: 'Apply ingress configuration'
+    - script: |
+        kubectl create namespace nginx-ingress
+        helm install nginx-ingress ingress-nginx/ingress-nginx --namespace nginx-ingress
+      displayName: 'Install NGINX Ingress Controller'
