@@ -34,7 +34,7 @@ spec:
         app: nodejsdemo2
     spec:
       containers:
-        - name: nssfmdemo2
+        - name: mynginx
           image: nginx:latest
           ports:
             - containerPort: 80
