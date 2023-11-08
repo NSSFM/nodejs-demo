@@ -1,34 +1,15 @@
-trigger:
+trigger: 
 - manual
 
 stages:
 - stage: deploy
   jobs:
-  - job: install_nginx_ingress_controller
+  - job: deploy_ingress
     steps:
-    - task: UsePythonVersion@0
-      inputs:
-        versionSpec: '3.x'
-        addToPath: true
-      displayName: 'Set up Python'
-
-    - task: Kubernetes@1
-      inputs:
-        kubernetesServiceEndpoint: 'nssfmK8s'  
-        command: 'apply'
-        arguments: '-f nssfm-demo-ingress2.yaml'
-      displayName: 'Install NGINX Ingress Controller'
-
-    - script: |
-        helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
-        helm repo update
-      displayName: 'Add NGINX Ingress Helm repository'
-
     - task: Kubernetes@1
       inputs:
         connectionType: 'Kubernetes Service Connection'
-        kubernetesServiceEndpoint: 'nssfmK8s'  
-    - script: |
-          kubectl create namespace nginx-ingress
-          helm install nginx-ingress ingress-nginx/ingress-nginx --namespace nginx-ingress
-      displayName: 'Install NGINX Ingress Controller'
+        kubernetesServiceEndpoint: 'nssfmK8s'
+        command: 'apply'
+        arguments: '-f nssfm-demo-ingress2.yaml'
+      displayName: 'Apply ingress configuration'
