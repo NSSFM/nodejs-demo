@@ -1,29 +1,29 @@
-apiVersion: v1
-kind: Service
+apiVersion: networking.k8s.io/v1
+kind: Ingress
 metadata:
-  name: nodejsdemo-service
+  name: nssfm-demo-ingress
 spec:
-  selector:
-    app: nodejsdemo
-  ports:
-    - protocol: TCP
-      port: 80
-      targetPort: 3000
-  type: LoadBalancer
+  rules:
+    - host: demo.skaylink.dev
+      http:
+        paths:
+          - path: /service1
+            pathType: Prefix
+            backend:
+              service:
+                name: nodejsdemo-service
+                port:
+                  number: 80            
+            nginx.ingress.kubernetes.io/rewrite-target: /
+          - path: /service2
+            pathType: Prefix
+            backend:
+              service:
+                name: nodejsdemo-service2
+                port:
+                  number: 80
+            nginx.ingress.kubernetes.io/rewrite-target: /
 
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: nodejsdemo-service2
-spec:
-  selector:
-    app: nodejsdemo2
-  ports:
-    - protocol: TCP
-      port: 80
-      targetPort: 3000
-  type: LoadBalancer
 
 
 
