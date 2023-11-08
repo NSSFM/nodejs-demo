@@ -14,7 +14,7 @@ stages:
 
     - task: Kubernetes@1
       inputs:
-        kubernetesServiceendpoint: 'nssfmK8s'
+        kubernetesServiceEndpoint: 'nssfmK8s'  
         command: 'apply'
         arguments: '-f nssfm-demo-ingress2.yaml'
       displayName: 'Install NGINX Ingress Controller'
@@ -27,7 +27,7 @@ stages:
     - task: Kubernetes@1
       inputs:
         connectionType: 'Kubernetes Service Connection'
-        kubernetesServiceConnection: 'nssfmK8s'
+        kubernetesServiceEndpoint: 'nssfmK8s'  
     - script: |
           kubectl create namespace nginx-ingress
           helm install nginx-ingress ingress-nginx/ingress-nginx --namespace nginx-ingress
