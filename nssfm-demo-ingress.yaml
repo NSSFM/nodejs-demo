@@ -3,6 +3,7 @@ kind: Ingress
 metadata:
   name: nssfm-demo-ingress
 spec:
+  ingressClassName: nginx
   rules:
     - host: demo1.skaylink.dev
       http:
