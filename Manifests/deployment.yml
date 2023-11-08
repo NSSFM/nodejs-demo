@@ -22,7 +22,7 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nodejsdemo2
+  name: nginx
 spec:
   replicas: 3
   selector:
@@ -35,7 +35,7 @@ spec:
     spec:
       containers:
         - name: nssfmdemo2
-          image: nssfm/nssfmdemo:try
+          image: nginx:latest
           ports:
-            - containerPort: 3000
+            - containerPort: 80
 
