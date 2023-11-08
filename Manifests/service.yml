@@ -3,6 +3,8 @@ kind: Service
 metadata:
   name: nodejsdemo-service
 spec:
+  selector:
+    app: nodejsdemo
   ports:
     - protocol: TCP
       port: 80
@@ -15,6 +17,8 @@ kind: Service
 metadata:
   name: mynginx
 spec:
+  selector:
+    app: mynginx
   ports:
     - protocol: TCP
       port: 80
