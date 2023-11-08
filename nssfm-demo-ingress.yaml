@@ -14,3 +14,13 @@ spec:
                 name: nodejsdemo-service
                 port:
                   number: 80
+    - host: demo2.skaylink.dev
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: nodejsdemo-service2
+                port:
+                  number: 80
