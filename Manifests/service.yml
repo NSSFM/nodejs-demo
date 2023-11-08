@@ -11,5 +11,19 @@ spec:
       targetPort: 3000
   type: LoadBalancer
 
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nodejsdemo-service2
+spec:
+  selector:
+    app: nodejsdemo2
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 3000
+  type: LoadBalancer
+
 
 
