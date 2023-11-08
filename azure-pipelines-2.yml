@@ -6,12 +6,11 @@ stages:
   jobs:
   - job: deploy_ingress
     steps:
-    - task: KubernetesManifest@0
+    - task: Kubernetes@1
       inputs:
-        action: 'deploy'
-        kubernetesServiceConnection: 'nssfmK8s'
-        namespace: 'default'
-        manifests: |
-          Manifests/serviceLoadBalancer.yml
-      displayName: 'Deploy to Kubernetes'
+        connectionType: 'Kubernetes Service Connection'
+        kubernetesServiceEndpoint: 'nssfmK8s'
+        command: 'apply'
+        arguments: '-f nssfm-demo-ingress2.yaml'
+      displayName: 'Apply ingress configuration'
 
