@@ -11,7 +11,7 @@ stages:
         connectionType: 'Kubernetes Service Connection'
         kubernetesServiceEndpoint: 'nssfmK8s'
         command: 'apply'
-        arguments: '-f nssfm-demo-ingress.yaml'
+        arguments: '-f nssfm-demo-ingress2.yaml'
         displayName: 'Apply ingress configuration'
 
 
