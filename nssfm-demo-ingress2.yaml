@@ -7,19 +7,23 @@ spec:
     - host: demo1.skaylink.dev
       http:
         paths:
-          - path: /
+          - path: /api/v1/nos
             pathType: Prefix
             backend:
               service:
                 name: nodejsdemo-service
                 port:
                   number: 80
-          - path: /service2
+    - host: demo1.skaylink.dev
+      http:
+        paths:
+          - path: /api/v2/son
             pathType: Prefix
             backend:
               service:
                 name: nodejsdemo-service2
                 port:
                   number: 80
+
 
 
