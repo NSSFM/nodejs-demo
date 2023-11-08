@@ -1,4 +1,4 @@
-trigger: 
+trigger:
 - manual
 
 stages:
@@ -23,15 +23,12 @@ stages:
         helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
         helm repo update
       displayName: 'Add NGINX Ingress Helm repository'
-    
 
     - task: Kubernetes@1
-  inputs:
-    connectionType: 'Kubernetes Service Connection'
-    kubernetesServiceConnection: 'nssfmK8s'
-    
-      - script: |
+      inputs:
+        connectionType: 'Kubernetes Service Connection'
+        kubernetesServiceConnection: 'nssfmK8s'
+    - script: |
           kubectl create namespace nginx-ingress
           helm install nginx-ingress ingress-nginx/ingress-nginx --namespace nginx-ingress
-   displayName: 'Install NGINX Ingress Controller'
-
+      displayName: 'Install NGINX Ingress Controller'
