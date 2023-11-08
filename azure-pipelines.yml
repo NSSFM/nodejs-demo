@@ -38,8 +38,8 @@ jobs:
       kubernetesServiceConnection: 'nssfmK8s'
       namespace: 'default'
       manifests: |
-        Manifests/deploymentTheSecond.yml
-        Manifests/serviceTheSecond.yml
+        Manifests/deployment.yml
+        Manifests/service.yml
     displayName: 'Deploy to Kubernetes'
     
    #For first instace use  Manifests/deployment.yml & Manifests/service.yml
