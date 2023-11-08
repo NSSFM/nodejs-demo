@@ -4,7 +4,7 @@ trigger:
 stages:
 - stage: deploy
   jobs:
-  - job: install_helm
+  - job: install_helm_and_nginx_ingress
     steps:
     - task: UsePythonVersion@0
       inputs:
@@ -13,20 +13,18 @@ stages:
       displayName: 'Set up Python'
 
     - script: |
-        curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
+        curl https://baltocdn.com/helm/signing.asc | sudo apt-key add -
+        sudo apt-get install apt-transport-https --yes
+        echo "deb https://baltocdn.com/helm/stable/debian/ all main" | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list
+        sudo apt-get update
+        sudo apt-get install helm
       displayName: 'Install Helm'
 
-  - job: install_nginx_ingress_controller
-    steps:
-    - task: HelmInstaller@1
-      inputs:
-        helmVersion: '3.x'
-        displayName: 'Install Helm 3'
-
     - script: |
-        helm repo add stable https://charts.helm.sh/stable
-        helm install nginx-ingress stable/nginx-ingress
-      displayName: 'Install Nginx Ingress Controller'
+        helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+        helm repo update
+        helm install nginx-ingress ingress-nginx/ingress-nginx
+      displayName: 'Install NGINX Ingress Controller'
 
   - job: deploy_ingress
     steps:
@@ -37,8 +35,3 @@ stages:
         command: 'apply'
         arguments: '-f nssfm-demo-ingress2.yaml'
         displayName: 'Apply ingress configuration'
-
-
-
-
-  
