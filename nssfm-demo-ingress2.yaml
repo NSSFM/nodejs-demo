@@ -17,11 +17,11 @@ spec:
                 name: nodejsdemo-service
                 port:
                   number: 80
-          - path: /nodejs_demo2
+          - path: /nginx_demo
             pathType: Prefix
             backend:
               service:
-                name: nodejsdemo-service2
+                name: mynginx
                 port:
                   number: 80
 
