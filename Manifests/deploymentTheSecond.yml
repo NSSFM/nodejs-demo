@@ -1,19 +1,40 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nodejsdemo2
+  name: nodejsdemo
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: nodejsdemo2
+      app: nodejsdemo
   template:
     metadata:
       labels:
-        app: nodejsdemo2
+        app: nodejsdemo
     spec:
       containers:
-        - name: nssfmdemo2
+        - name: nssfmdemo
           image: nssfm/nssfmdemo:try
           ports:
             - containerPort: 3000
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: mynginx
+  template:
+    metadata:
+      labels:
+        app: mynginx
+    spec:
+      containers:
+        - name: mynginx
+          image: nginx:latest
+          ports:
+            - containerPort: 80
