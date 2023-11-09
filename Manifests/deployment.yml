@@ -22,20 +22,20 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: mynginx
+  name: nodejsdemo2
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: mynginx
+      app: nodejsdemo2
   template:
     metadata:
       labels:
-        app: mynginx
+        app: nodejsdemo2
     spec:
       containers:
-        - name: mynginx
-          image: nginx:latest
+        - name: nodejsdemo2
+          image: nssfm/nssfmdemo:try
           ports:
-            - containerPort: 80
+            - containerPort: 3000
 
