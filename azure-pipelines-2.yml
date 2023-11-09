@@ -2,35 +2,6 @@ trigger:
 - manual
 
 stages:
-- stage: Install_Nginx_Ingress
-  displayName: Install Nginx Ingress Controller
-  jobs:
-  - job: InstallNginxIngress
-    displayName: Install Nginx Ingress Controller
-    pool:
-      vmImage: 'ubuntu-latest'
-    steps:
-    - task: UseDotNet@2
-      inputs:
-        packageType: 'sdk'
-        version: '3.x'
-      displayName: 'Use .NET Core SDK 3.x'
-
-    - task: KubernetesServiceConnectionInstaller@1
-      inputs:
-        connectionName: 'nssfmK8s'
-        endpoint: 'nssfmK8s'
-        serviceEndpointType: 'kubectl'
-      displayName: 'Install Kubernetes Service Connection'
-
-    - script: |
-        curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
-        kubectl create namespace nginx-ingress
-        helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
-        helm repo update
-        helm install nginx-ingress ingress-nginx/ingress-nginx -n nginx-ingress --namespace nginx-ingress
-      displayName: 'Install Nginx Ingress Controller'
-
 - stage: deploy
   jobs:
   - job: deploy_ingress
@@ -42,5 +13,3 @@ stages:
         command: 'apply'
         arguments: '-f nssfm-demo-ingress2.yaml'
       displayName: 'Apply ingress configuration'
-
-
