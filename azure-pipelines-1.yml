@@ -2,6 +2,29 @@ trigger:
 - manual    
 
 stages:
+- stage: IaC_Preparation
+  displayName: Preparation
+  jobs:
+  - job: CreateResources
+    displayName: Create Resources
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - task: AzureCLI@2
+      inputs:
+        azureSubscription: 'YAzLogin_because_i_dumb'
+        scriptType: 'bash'
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+  
+          az group create --name NSSFMs-storage-rg --location 'eastus'
+          
+          az storage account create --name nssfmstorage --resource-group NSSFMs-storage-rg --location 'eastus' --sku Standard_LRS
+          
+          az storage container create --account-name nssfmstorage --name tf-state
+      displayName: 'Create Resources'
+      
+
 - stage: IaC_TF
   displayName: Terraform Infrastructure
   jobs:
@@ -21,7 +44,7 @@ stages:
         command: 'init'
         workingDirectory: '$(System.DefaultWorkingDirectory)/IaC/'
         backendServiceArm: 'AzLogin_because_i_dumb'
-        backendAzureRmResourceGroupName: 'NSSFMsRG-smooth-sloth'
+        backendAzureRmResourceGroupName: 'NSSFMs-storage-rg'
         backendAzureRmStorageAccountName: 'nssfmstorage'
         backendAzureRmContainerName: 'tf-state'
         backendAzureRmKey: 'tf/terraform.tfstate'
