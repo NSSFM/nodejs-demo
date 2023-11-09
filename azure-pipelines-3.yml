@@ -1,0 +1,23 @@
+trigger:
+- manual
+
+stages:
+- stage: Backend_TFState
+  displayName: 'Backend TFState'
+  jobs:
+  - job: Backend
+    displayName: 'Upload TFState to Storage'
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - task: AzureFileCopy@5
+      displayName: 'Copy TFState to Storage'
+      inputs:
+        SourcePath: '$(Build.SourcesDirectory)/IaC/terraform.tfstate'
+        azureSubscription: 'AzLogin_because_i_dumb'
+        Destination: 'AzureBlob'
+        storage: 'nssfmstorage'
+        ContainerName: 'tfstate-container'
+        BlobPrefix: 'terraform.tfstate'
+        CleanTargetBeforeCopy: true
+
