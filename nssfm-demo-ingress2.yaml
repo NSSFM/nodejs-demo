@@ -17,7 +17,7 @@ spec:
                 name: nodejsdemo-service
                 port:
                   number: 80
-          - path: /service-nginx
+          - path: /
             pathType: Prefix
             backend:
               service:
