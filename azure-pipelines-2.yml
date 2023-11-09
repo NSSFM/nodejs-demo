@@ -14,7 +14,7 @@ stages:
       inputs:
         packageType: 'sdk'
         version: '4.x'
-      displayName: 'Use .NET Core SDK 4.x'
+      displayName: 'Use .NET Core SDK 3.x'
 
     - script: |
         curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
