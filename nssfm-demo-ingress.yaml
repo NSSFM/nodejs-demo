@@ -2,10 +2,12 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: nssfm-demo-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   ingressClassName: nginx
   rules:
-    - host: demo1.skaylink.dev
+    - host: ""
       http:
         paths:
           - path: /
@@ -15,10 +17,7 @@ spec:
                 name: nodejsdemo-service
                 port:
                   number: 80
-    - host: demo2.skaylink.dev
-      http:
-        paths:
-          - path: /
+          - path: /nodejs_demo2
             pathType: Prefix
             backend:
               service:
