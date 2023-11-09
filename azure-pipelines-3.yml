@@ -1,29 +1,35 @@
 trigger:
-- manual
+- manual    
 
 stages:
-- stage: Backend_TFState
-  displayName: 'Backend TFState'
+- stage: IaC_TF
+  displayName: Terraform Infrastructure
   jobs:
-  - job: Backend
-    displayName: 'Upload TFState to Storage'
+  - job: Terraform     
+    displayName: Terraform Deployment
     pool:
       vmImage: ubuntu-latest
     steps:
-    - task: AzureCLI@2
+    - task: TerraformInstaller@1
       inputs:
-        azureSubscription: 'AzLogin_because_i_dumb'
-        scriptType: 'bash'
-        scriptLocation: 'inlineScript'
-        inlineScript: |
-          az storage blob upload \
-            --account-name nssfmstorage \
-            --account-key $(StorageAccountKey) \
-            --container-name tf-state \
-            --name terraform.tfstate \
-            --type block \
-            --content-type "application/octet-stream" \
-            --content "$(Build.SourcesDirectory)/IaC/terraform.tfstate"
+        terraformVersion: 'latest'
+      displayName: 'Terraform init'
+    
+    - task: TerraformTaskV4@4
+      inputs:
+        provider: 'azurerm'
+        command: 'init'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/IaC-Backend/'
+        backendServiceArm: 'AzLogin_because_i_dumb'
+      displayName: 'Terraform init'
+
+    - task: TerraformTaskV4@4
+      inputs:
+        provider: 'azurerm'
+        command: 'apply'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/IaC-Backend/'
+        environmentServiceNameAzureRM: 'AzLogin_because_i_dumb'
+      displayName: 'Terraform apply'
 
 
 
