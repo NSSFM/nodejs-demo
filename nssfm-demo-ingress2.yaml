@@ -10,7 +10,7 @@ spec:
     - host: ""
       http:
         paths:
-          - path: /
+          - path: /nodejsdemo
             pathType: Prefix
             backend:
               service:
@@ -24,6 +24,7 @@ spec:
                 name: mynginx
                 port:
                   number: 80
+
 
 
 
