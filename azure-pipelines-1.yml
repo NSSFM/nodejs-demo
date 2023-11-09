@@ -45,34 +45,4 @@ stages:
         commandOptions: 'main.tfplan'
       displayName: 'Terraform apply'
 
-    - task: PublishPipelineArtifact@1
-      inputs:
-        targetPath: '$(System.DefaultWorkingDirectory)/IaC/'
-        artifact: 'backendConfiguration'
-        publishLocation: 'pipeline'
-      displayName: 'Publish Backend Configuration'
-
-  - job: ApplyBackendConfiguration
-    displayName: 'Apply Backend Configuration'
-    pool:
-      vmImage: ubuntu-latest
-    dependsOn: Terraform
-    steps:
-    - task: DownloadPipelineArtifact@2
-      inputs:
-        artifact: 'backendConfiguration'
-        path: '$(System.DefaultWorkingDirectory)/backendConfiguration'
-      displayName: 'Download Backend Configuration'
-
-    - script: |
-        cp -r $(System.DefaultWorkingDirectory)/backendConfiguration/* $(System.DefaultWorkingDirectory)/IaC/
-        terraform init
-        terraform apply -auto-approve
-      displayName: 'Apply Backend Configuration'
-      
-    
-
-
-   
-
 
