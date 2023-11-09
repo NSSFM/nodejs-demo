@@ -12,7 +12,7 @@ resource "azurerm_storage_account" "nssfmstorage" {
   account_replication_type = "LRS"
 }
 
-resource "azurerm_storage_container" "tfstate_container" {
+resource "azurerm_storage_container" "tfstate-container" {
   name                  = "tfstate-container"
   storage_account_name  = "nssfmstorage"
   container_access_type = "private"
