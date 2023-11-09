@@ -2,28 +2,6 @@ trigger:
 - manual    
 
 stages:
-- stage: IaC_Preparation
-  displayName: Preparation
-  jobs:
-  - job: CreateResources
-    displayName: Create Resources
-    pool:
-      vmImage: ubuntu-latest
-    steps:
-    - task: AzureCLI@2
-      inputs:
-        azureSubscription: 'AzLogin_because_i_dumb'
-        scriptType: 'bash'
-        scriptLocation: 'inlineScript'
-        inlineScript: |
-  
-          az group create --name NSSFMs-storage-rg --location 'eastus'
-          
-          az storage account create --name nssfmstorage --resource-group NSSFMs-storage-rg --location 'eastus' --sku Standard_LRS
-          
-          az storage container create --account-name nssfmstorage --name tf-state
-      displayName: 'Create Resources'
-      
 
 - stage: IaC_TF
   displayName: Terraform Infrastructure
@@ -48,7 +26,7 @@ stages:
         backendAzureRmStorageAccountName: 'nssfmstorage'
         backendAzureRmContainerName: 'tf-state'
         backendAzureRmKey: 'tf/terraform.tfstate'
-      displayName: 'Terraform init'    #if u need persistance better use S3 storage for tfstate files
+      displayName: 'Terraform init'
 
     - task: TerraformTaskV4@4
       inputs:
