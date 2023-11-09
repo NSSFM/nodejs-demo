@@ -16,6 +16,13 @@ stages:
         version: '3.x'
       displayName: 'Use .NET Core SDK 3.x'
 
+    - task: KubernetesServiceConnectionInstaller@1
+      inputs:
+        connectionName: 'nssfmK8s'
+        endpoint: 'nssfmK8s'
+        serviceEndpointType: 'kubectl'
+      displayName: 'Install Kubernetes Service Connection'
+
     - script: |
         curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
         kubectl create namespace nginx-ingress
@@ -35,4 +42,5 @@ stages:
         command: 'apply'
         arguments: '-f nssfm-demo-ingress2.yaml'
       displayName: 'Apply ingress configuration'
+
 
