@@ -10,14 +10,14 @@ spec:
     - host: ""
       http:
         paths:
-          - path: /nodejsdemo
+          - path: /
             pathType: Prefix
             backend:
               service:
                 name: nodejsdemo-service
                 port:
                   number: 80
-          - path: /
+          - path: /second_service
             pathType: Prefix
             backend:
               service:
