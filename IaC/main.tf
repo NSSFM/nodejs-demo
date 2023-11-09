@@ -13,7 +13,7 @@ resource "azurerm_storage_account" "nssfmstorage" {
 }
 
 resource "azurerm_storage_container" "tfstate_container" {
-  name                  = "tfstate_container"
+  name                  = "tfstate-container"
   storage_account_name  = "nssfmstorage"
   container_access_type = "private"
 }
