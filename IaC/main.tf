@@ -12,12 +12,6 @@ resource "azurerm_storage_account" "nssfmstorage" {
   account_replication_type = "LRS"
 }
 
-resource "azurerm_storage_container" "tfstate-container" {
-  name                  = "tfstate-container"
-  storage_account_name  = "nssfmstorage"
-  container_access_type = "private"
-}
-
 resource "azurerm_kubernetes_cluster" "k8s" {
   location            = azurerm_resource_group.rg.location
   name                = var.kubernetes_cluster_name
