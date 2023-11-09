@@ -2,11 +2,11 @@ trigger:
 - manual    
 
 stages:
-- stage: IaC_TF
-  displayName: Terraform Infrastructure
+- stage: IaC_Destroy
+  displayName: Terraform Destroy
   jobs:
-  - job: Terraform     
-    displayName: Terraform Deployment
+  - job: TerraformDestroy     
+    displayName: Terraform Destruction
     pool:
       vmImage: ubuntu-latest
     steps:
@@ -19,17 +19,23 @@ stages:
       inputs:
         provider: 'azurerm'
         command: 'init'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/IaC-Backend/'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/IaC/'
         backendServiceArm: 'AzLogin_because_i_dumb'
+        backendAzureRmResourceGroupName: 'NSSFMs-storage-rg'
+        backendAzureRmStorageAccountName: 'nssfmstorage'
+        backendAzureRmContainerName: 'tf-state'
+        backendAzureRmKey: 'tf/terraform.tfstate'
       displayName: 'Terraform init'
 
     - task: TerraformTaskV4@4
       inputs:
         provider: 'azurerm'
-        command: 'apply'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/IaC-Backend/'
+        command: 'destroy'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/IaC/'
         environmentServiceNameAzureRM: 'AzLogin_because_i_dumb'
-      displayName: 'Terraform apply'
+        commandOptions: '-auto-approve'
+      displayName: 'Terraform destroy'
+
 
 
 
