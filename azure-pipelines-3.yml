@@ -10,14 +10,19 @@ stages:
     pool:
       vmImage: ubuntu-latest
     steps:
-    - task: AzureFileCopy@5
-      displayName: 'Copy TFState to Storage'
-      inputs:
-        SourcePath: '$(Build.SourcesDirectory)/IaC/terraform.tfstate'
-        azureSubscription: 'AzLogin_because_i_dumb'
-        Destination: 'AzureBlob'
-        storage: 'nssfmstorage'
-        ContainerName: 'tfstate-container'
-        BlobPrefix: 'terraform.tfstate'
-        CleanTargetBeforeCopy: true
+    - task: AzureCLI@2
+  displayName: 'Azure CLI Upload TFState'
+  inputs:
+    azureSubscription: 'AzLogin_because_i_dumb'
+    scriptType: 'bash'
+    scriptLocation: 'inlineScript'
+    inlineScript: |
+      az storage blob upload \
+        --account-name nssfmstorage \
+        --account-key $(StorageAccountKey) \
+        --container-name tf-state \
+        --name terraform.tfstate \
+        --type block \
+        --content $(Build.SourcesDirectory)/IaC/terraform.tfstate
+
 
