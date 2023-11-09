@@ -7,6 +7,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
+    - host: demo1.skaylink.dev
       http:
         paths:
           - path: /
@@ -23,6 +24,7 @@ spec:
                 name: mynginx
                 port:
                   number: 80
+
 
 
 
