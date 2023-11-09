@@ -22,7 +22,8 @@ stages:
             --container-name tf-state \
             --name terraform.tfstate \
             --type block \
-            --content $(Build.SourcesDirectory)/IaC/terraform.tfstate
+            --content "$(Build.SourcesDirectory)/IaC/terraform.tfstate"
+
 
 
 
