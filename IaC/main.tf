@@ -33,3 +33,13 @@ resource "azurerm_kubernetes_cluster" "k8s" {
     load_balancer_sku = "standard"
   }
 }
+
+terraform {
+  backend "azurerm" {
+    resource_group_name   = "NSSFMs-storage-rg"
+    storage_account_name   = "nssfmstorage"
+    container_name         = "tf-state"
+    key                    = "tf/terraform.tfstate"
+  }
+}
+
