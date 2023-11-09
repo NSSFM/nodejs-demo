@@ -21,7 +21,7 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: nodejsdemo2
+                name: nodejsdemo-service2
                 port:
                   number: 80
 
