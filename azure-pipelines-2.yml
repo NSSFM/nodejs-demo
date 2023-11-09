@@ -1,7 +1,34 @@
-trigger: 
+trigger:
 - manual
 
 stages:
+- stage: Install_Nginx_Ingress
+  displayName: Install Nginx Ingress Controller
+  jobs:
+  - job: InstallNginxIngress
+    displayName: Install Nginx Ingress Controller
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - task: UseDotV4@2
+      inputs:
+        packageType: 'runtime'
+        version: '4.x'
+        addToPath: true
+      displayName: 'Use .NET Core SDK 4.x'
+
+    - task: InstallHelm@1
+      inputs:
+        helmVersion: 'latest'
+      displayName: 'Install Helm'
+
+    - script: |
+        kubectl create namespace nginx-ingress
+        helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+        helm repo update
+        helm install nginx-ingress ingress-nginx/ingress-nginx -n nginx-ingress --namespace nginx-ingress
+      displayName: 'Install Nginx Ingress Controller'
+
 - stage: deploy
   jobs:
   - job: deploy_ingress
