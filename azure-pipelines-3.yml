@@ -11,17 +11,18 @@ stages:
       vmImage: ubuntu-latest
     steps:
     - task: AzureCLI@2
-  inputs:
-    azureSubscription: 'AzLogin_because_i_dumb'
-    scriptType: 'bash'
-    scriptLocation: 'inlineScript'
-    inlineScript: |
-      az storage blob upload \
-        --account-name nssfmstorage \
-        --account-key $(StorageAccountKey) \
-        --container-name tf-state \
-        --name terraform.tfstate \
-        --type block \
-        --content $(Build.SourcesDirectory)/IaC/terraform.tfstate
+      inputs:
+        azureSubscription: 'AzLogin_because_i_dumb'
+        scriptType: 'bash'
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          az storage blob upload \
+            --account-name nssfmstorage \
+            --account-key $(StorageAccountKey) \
+            --container-name tf-state \
+            --name terraform.tfstate \
+            --type block \
+            --content $(Build.SourcesDirectory)/IaC/terraform.tfstate
+
 
 
