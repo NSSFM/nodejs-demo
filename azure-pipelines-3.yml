@@ -22,7 +22,9 @@ stages:
             --container-name tf-state \
             --name terraform.tfstate \
             --type block \
+            --content-type "application/octet-stream" \
             --content "$(Build.SourcesDirectory)/IaC/terraform.tfstate"
+
 
 
 
