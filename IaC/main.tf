@@ -46,7 +46,7 @@ resource "azurerm_kubernetes_cluster" "k8s" {
     backend "azurerm" {
       resource_group_name   = azurerm_resource_group.rg.name
       storage_account_name  = azurerm_storage_account.nssfmstorage.name
-      container_name        = "your-container"
+      container_name        = "tfstste_container"
       key                   = "terraform.tfstate"
   }
 }
